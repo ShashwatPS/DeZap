@@ -1,0 +1,23 @@
+{
+  "name": "processor",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "tsc -b && node dist/index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@prisma/client": "^5.16.2",
+    "dotenv": "^16.4.7",
+    "kafkajs": "^2.2.4",
+    "prisma": "^5.16.2",
+    "type-fest": "^4.35.0",
+    "typescript": "^5.7.3"
+  },
+  "devDependencies": {
+    "@types/node": "^22.13.4"
+  }
+}
