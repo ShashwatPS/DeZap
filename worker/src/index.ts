@@ -67,6 +67,8 @@ async function main() {
           const zapRunMetadata = zapRunDetails?.metadata;
 
           if (currentAction.type.id === "email") {
+            const data = currentAction.metadata as JsonObject;
+            console.log(data)
             const body = parse((currentAction.metadata as JsonObject)?.body as string, zapRunMetadata);
             const to = parse((currentAction.metadata as JsonObject)?.email as string, zapRunMetadata);
             console.log(`Sending out email to ${to} body is ${body}`)
