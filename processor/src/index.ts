@@ -26,6 +26,7 @@ async function main() {
 
         producer.send({
             topic: TOPIC_NAME,
+            // @ts-ignore
             messages: pendingRows.map(r => {
                 return {
                     value: JSON.stringify({ zapRunId: r.zapRunId, stage: 0 })
@@ -36,6 +37,7 @@ async function main() {
         await client.zapRunOutbox.deleteMany({
             where: {
                 id: {
+                    // @ts-ignore
                     in: pendingRows.map(x => x.id)
                 }
             }
