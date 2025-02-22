@@ -162,7 +162,7 @@ function Modal({ index, onSelect, availableItems }: { index: number, onSelect: (
                     }} />}
 
                     {step === 0 && <div>{availableItems.map(({id, name, image}) => {
-                            return <div keyonClick={() => {
+                            return <div onClick={() => {
                                 if (isTrigger) {
                                     onSelect({
                                         id,
