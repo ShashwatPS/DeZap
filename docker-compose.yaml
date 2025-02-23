@@ -10,6 +10,17 @@ services:
     env_file:
       - .env
 
+  poll:
+    build:
+      context: ./poll
+    depends_on:
+      my-pb:
+        condition: service_healthy
+    ports:
+      - "3003:3003"
+    env_file:
+      - .env
+
   my-pb:
     build:
       context: ./primary-backend
