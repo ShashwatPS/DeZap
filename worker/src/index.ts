@@ -10,6 +10,8 @@ import {sendSolToMultiple} from "./multipleSolana";
 import {PublicKey} from "@solana/web3.js";
 import {ethers} from "ethers";
 import {sendEthToMultiple} from "./multipleETH";
+import createOffer from "./createOffer";
+import createListing from "./createListing";
 
 dotenv.config()
 const prismaClient = new PrismaClient();
@@ -81,6 +83,22 @@ async function main() {
             await sendEmail(to, body, "Email From Dezap");
 
             console.log(`Sending out email to ${to} body is ${body}`)
+          }
+
+          if (currentAction.type.id === "create-offer") {
+            const amount = parse((currentAction.metadata as JsonObject)?.amount as string, zapRunMetadata);
+            const address = parse((currentAction.metadata as JsonObject)?.address as string, zapRunMetadata);
+            const tokenId = parse((currentAction.metadata as JsonObject)?.tokenId as string, zapRunMetadata);
+            console.log(`Creating offer of ${amount} to address ${address}`);
+            await createOffer(address, tokenId, amount);
+          }
+
+          if(currentAction.type.id === "create-listing") {
+            const amount = parse((currentAction.metadata as JsonObject)?.amount as string, zapRunMetadata);
+            const address = parse((currentAction.metadata as JsonObject)?.address as string, zapRunMetadata);
+            const tokenId = parse((currentAction.metadata as JsonObject)?.tokenId as string, zapRunMetadata);
+            console.log(`Creating listing of ${amount} to address ${address}`);
+            await createListing(address, tokenId, amount);
           }
 
           if (currentAction.type.id === "send-sol") {

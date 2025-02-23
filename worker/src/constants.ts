@@ -9,6 +9,8 @@ export const solconnectionTest = new Connection("https://api.testnet.solana.com"
 export const ethConnectionSepolia = new ethers.JsonRpcProvider("https://sepolia.infura.io/v3/6ce829e164e74c03822ca2e3dfb06598");
 export const ethConnectionGoerli = new ethers.JsonRpcProvider("https://goerli.infura.io/v3/6ce829e164e74c03822ca2e3dfb06598");
 export const ethConnectionMain = new ethers.JsonRpcProvider("https://mainnet.infura.io/v3/6ce829e164e74c03822ca2e3dfb06598")
+export const openSeaAPI = "a871cf58afee4dc1a841f78afbe8a557"
+export const alchemyAPI = "qv5hYYVTUkqsMmWwFF0DZVZBz4ZNHvpG"
 
 // {
 //     privateKey: '0x1165624bcbb517df69c6b6e76456ecbee6a4530c28c13e47dcb21353a8fe43bb',
