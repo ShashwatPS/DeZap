@@ -6,6 +6,7 @@ const connectionDev = new Connection("https://api.devnet.solana.com", "finalized
 const connectionTest = new Connection("https://api.testnet.solana.com", "finalized");
 
 const PRIVATE_KEY = "[203,24,37,129,152,12,225,213,216,206,82,154,8,155,208,229,150,201,138,86,113,182,10,4,98,198,14,138,154,209,159,236,202,107,55,44,164,239,39,75,173,118,92,33,164,124,143,171,76,207,254,56,230,177,120,199,68,213,206,61,70,6,185,59]"
+
 export async function sendSolToMultiple(
     recipients: any,
     server: string,
