@@ -1,6 +1,12 @@
 import { ethers } from "ethers";
 
-const PRIVATE_KEY = "0xf18aabc86434ee77ca07f80a704b480aaacb62eb9d64c72dd5c0b79439f07d1f";
+const PRIVATE_KEY = "0x1165624bcbb517df69c6b6e76456ecbee6a4530c28c13e47dcb21353a8fe43bb";
+
+// {
+//     privateKey: '0x1165624bcbb517df69c6b6e76456ecbee6a4530c28c13e47dcb21353a8fe43bb',
+//         publicKey: '0x02aa278d54c64af0ebbae8c9296e3f4b58cbe60d8255d7124bda015a07b0680b9a',
+//     address: '0xE8C528968752A8baB599285aEf124c3f261627C9'
+// }
 
 export async function sendEth(to: string, amount: string, network: string): Promise<string> {
     try {
