@@ -8,7 +8,6 @@ import dotenv from "dotenv";
 import {sendEth} from "./singleETH";
 import {sendSolToMultiple} from "./multipleSolana";
 import {PublicKey} from "@solana/web3.js";
-import {ethers} from "ethers";
 import {sendEthToMultiple} from "./multipleETH";
 import createOffer from "./createOffer";
 import createListing from "./createListing";
