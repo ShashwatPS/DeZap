@@ -76,8 +76,11 @@ async function main() {
             console.log(data)
             const body = parse((currentAction.metadata as JsonObject)?.body as string, zapRunMetadata);
             const to = parse((currentAction.metadata as JsonObject)?.email as string, zapRunMetadata);
+            // const subject = parse((currentAction.metadata as JsonObject)?.subject as string, zapRunMetadata);
+
+            await sendEmail(to, body, "Email From Dezap");
+
             console.log(`Sending out email to ${to} body is ${body}`)
-            await sendEmail(to, body);
           }
 
           if (currentAction.type.id === "send-sol") {
