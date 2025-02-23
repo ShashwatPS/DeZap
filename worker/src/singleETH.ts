@@ -15,11 +15,11 @@ export async function sendEth(to: string, amount: string, network: string): Prom
         }
 
         const provider = network === "main"
-            ? new ethers.JsonRpcProvider("https://mainnet.infura.io/v3/YOUR_INFURA_API_KEY")
+            ? new ethers.JsonRpcProvider("https://mainnet.infura.io/v3/6ce829e164e74c03822ca2e3dfb06598")
             : network === "goerli"
-                ? new ethers.JsonRpcProvider("https://goerli.infura.io/v3/YOUR_INFURA_API_KEY")
+                ? new ethers.JsonRpcProvider("https://goerli.infura.io/v3/6ce829e164e74c03822ca2e3dfb06598")
                 : network === "sepolia"
-                    ? new ethers.JsonRpcProvider("https://sepolia.infura.io/v3/YOUR_INFURA_API_KEY")
+                    ? new ethers.JsonRpcProvider("https://sepolia.infura.io/v3/6ce829e164e74c03822ca2e3dfb06598")
                     : null;
 
         if (!provider) {
@@ -31,7 +31,7 @@ export async function sendEth(to: string, amount: string, network: string): Prom
 
         const tx = await wallet.sendTransaction({
             to,
-            value: ethers.parseUnits(amount, "ether"),
+            value: ethers.parseUnits(amount, "wei"),
         });
 
         console.log("Transaction Sent! Hash:", tx.hash);
