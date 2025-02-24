@@ -17,20 +17,15 @@ const pollingManager = new Map<string, NodeJS.Timeout>();
 
 async function startPolling(zapID: string, zapData: any) {
     const interval = setInterval(async () => {
-        if(pollingManager.has(zapID)) {
-            return;
-        }
         console.log(`Polling for ZapID: ${zapID}`);
-
         // Add your polling logic here
         // If a certain condition is met, stop polling and return a result
-
-        const conditionMet = Math.random() > 0.8;
+        const conditionMet = Math.random() > 0.8; // Example condition
         if (conditionMet) {
             console.log(`Condition met for ZapID: ${zapID}`);
-
+            stopPolling(zapID);
         }
-    }, 5000);
+    }, 5000); // Poll every 5 seconds
 
     pollingManager.set(zapID, interval);
 }
