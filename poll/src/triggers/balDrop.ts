@@ -1,4 +1,3 @@
-export function checkCondition(data: any): boolean {
-    // Replace this with actual condition checking logic for condition1
-    return true
+async function pollData(userId: string, zapId: string, triggerId: string, metadata: any, requiredValue: string) {
+
 }
