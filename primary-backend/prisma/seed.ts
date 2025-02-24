@@ -15,6 +15,19 @@ async function main() {
         }
     })
 
+    await prismaClient.availableTrigger.upsert({
+        where: {
+            id: "choco",
+        },
+        update: {},
+        create: {
+            id: "choco",
+            name: "choco",
+            image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRIovxkR9l-OlwpjTXV1B4YNh0W_s618ijxAQ&s",
+
+        }
+    })
+
     await prismaClient.availableAction.upsert({
         where: {
             id: "email",

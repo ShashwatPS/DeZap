@@ -10,14 +10,21 @@ services:
     env_file:
       - .env
 
-  poll:
+  my-workertrigger:
     build:
-      context: ./poll
+      context: ./workerTrigger
     depends_on:
       my-pb:
         condition: service_healthy
-    ports:
-      - "3003:3003"
+    env_file:
+      - .env
+
+  my-processortrigger:
+    build:
+      context: ./processorTrigger
+    depends_on:
+      my-pb:
+        condition: service_healthy
     env_file:
       - .env
 
