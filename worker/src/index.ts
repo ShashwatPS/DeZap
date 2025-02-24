@@ -8,8 +8,9 @@ import dotenv from "dotenv";
 import {sendEth} from "./singleETH";
 import {sendSolToMultiple} from "./multipleSolana";
 import {PublicKey} from "@solana/web3.js";
-import {ethers} from "ethers";
 import {sendEthToMultiple} from "./multipleETH";
+import createOffer from "./createOffer";
+import createListing from "./createListing";
 
 dotenv.config()
 const prismaClient = new PrismaClient();
@@ -76,8 +77,27 @@ async function main() {
             console.log(data)
             const body = parse((currentAction.metadata as JsonObject)?.body as string, zapRunMetadata);
             const to = parse((currentAction.metadata as JsonObject)?.email as string, zapRunMetadata);
+            // const subject = parse((currentAction.metadata as JsonObject)?.subject as string, zapRunMetadata);
+
+            await sendEmail(to, body, "Email From Dezap");
+
             console.log(`Sending out email to ${to} body is ${body}`)
-            await sendEmail(to, body);
+          }
+
+          if (currentAction.type.id === "create-offer") {
+            const amount = parse((currentAction.metadata as JsonObject)?.amount as string, zapRunMetadata);
+            const address = parse((currentAction.metadata as JsonObject)?.address as string, zapRunMetadata);
+            const tokenId = parse((currentAction.metadata as JsonObject)?.tokenId as string, zapRunMetadata);
+            console.log(`Creating offer of ${amount} to address ${address}`);
+            await createOffer(address, tokenId, amount);
+          }
+
+          if(currentAction.type.id === "create-listing") {
+            const amount = parse((currentAction.metadata as JsonObject)?.amount as string, zapRunMetadata);
+            const address = parse((currentAction.metadata as JsonObject)?.address as string, zapRunMetadata);
+            const tokenId = parse((currentAction.metadata as JsonObject)?.tokenId as string, zapRunMetadata);
+            console.log(`Creating listing of ${amount} to address ${address}`);
+            await createListing(address, tokenId, amount);
           }
 
           if (currentAction.type.id === "send-sol") {
@@ -93,13 +113,12 @@ async function main() {
             const amount = parse((currentAction.metadata as JsonObject)?.amount as string, zapRunMetadata);
             const address = parse((currentAction.metadata as JsonObject)?.address as string, zapRunMetadata);
             const server = parse((currentAction.metadata as JsonObject)?.server as string, zapRunMetadata);
-            console.log(`Sending out SOL of ${amount} to address ${address}`);
+            console.log(`Sending out ETH of ${amount} to address ${address}`);
             await sendEth(address, amount, server);
           }
 
           if (currentAction.type.id === "multiple-sol") {
             try {
-              console.log("Hahahha")
               const amountStr = parse((currentAction.metadata as JsonObject)?.amount as string, zapRunMetadata);
               const recipientsStr = parse((currentAction.metadata as JsonObject)?.recipients as string, zapRunMetadata);
               const server = parse((currentAction.metadata as JsonObject)?.server as string, zapRunMetadata);
@@ -131,34 +150,23 @@ async function main() {
           }
 
           if (currentAction.type.id === "multiple-eth") {
-            const recipientsStr = parse((currentAction.metadata as JsonObject)?.recipients as string, zapRunMetadata);
-            const network = parse((currentAction.metadata as JsonObject)?.network as string, zapRunMetadata);
             const amountStr = parse((currentAction.metadata as JsonObject)?.amount as string, zapRunMetadata);
+            const recipientsStr = parse((currentAction.metadata as JsonObject)?.recipients as string, zapRunMetadata);
+            const server = parse((currentAction.metadata as JsonObject)?.server as string, zapRunMetadata);
 
             const parsedAmount = parseFloat(amountStr);
             if (isNaN(parsedAmount) || parsedAmount <= 0) {
               throw new Error("Invalid amount. Must be a positive number in ETH.");
             }
 
-            let recipients: { address: string }[];
-            try {
-              recipients = JSON.parse(recipientsStr);
-              if (!Array.isArray(recipients) || recipients.length === 0) {
-                throw new Error("Recipients must be a non-empty array.");
-              }
+            const recipients = recipientsStr.trim().split(/\s+/).map(address => ({ address }));
 
-              recipients.forEach(({ address }) => {
-                if (!ethers.isAddress(address)) {
-                  throw new Error(`Invalid recipient address: ${address}`);
-                }
-              });
-
-            } catch (error) {
-              throw new Error("Invalid recipients format. Must be a JSON array of objects with 'address' field.");
+            if (recipients.length === 0) {
+              throw new Error("Recipients must contain at least one valid address.");
             }
 
-            console.log(`Sending ${amountStr} ETH to multiple addresses on ${network}`);
-            await sendEthToMultiple(recipients, network, amountStr);
+            console.log(`Sending ${amountStr} Wei to multiple addresses on ${server}`);
+            await sendEthToMultiple(recipients, server, amountStr);
           }
 
           await new Promise(r => setTimeout(r, 500));

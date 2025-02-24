@@ -1,32 +1,37 @@
 import { ethers } from "ethers";
-
-const PRIVATE_KEY = "0xf18aabc86434ee77ca07f80a704b480aaacb62eb9d64c72dd5c0b79439f07d1f";
+import {ETH_PRIVATE_KEY, ethConnectionGoerli, ethConnectionMain} from "./constants";
 
 export async function sendEthToMultiple(recipients: { address: string }[], network: string, amount: string): Promise<string[]> {
     try {
-        if (!Array.isArray(recipients) || recipients.length === 0) {
-            throw new Error("Recipients list must be a non-empty array.");
+        if (typeof recipients === "string") {
+            try {
+                recipients = JSON.parse(recipients);
+            } catch {
+                throw new Error("Recipients is not a valid JSON string.");
+            }
+        }
+        if (
+            !Array.isArray(recipients) ||
+            recipients.length === 0 ||
+            !recipients.every(r => r.address)
+        ) {
+            throw new Error("Invalid recipients format. Must be a JSON array of objects with 'address' field.");
         }
 
         const provider = network === "main"
-            ? new ethers.JsonRpcProvider("https://mainnet.infura.io/v3/YOUR_INFURA_API_KEY")
+            ? ethConnectionMain
             : network === "goerli"
-                ? new ethers.JsonRpcProvider("https://goerli.infura.io/v3/YOUR_INFURA_API_KEY")
+                ? ethConnectionGoerli
                 : network === "sepolia"
-                    ? new ethers.JsonRpcProvider("https://sepolia.infura.io/v3/YOUR_INFURA_API_KEY")
+                    ? ethConnectionGoerli
                     : null;
 
         if (!provider) {
             throw new Error("Invalid network. Use 'main', 'goerli', or 'sepolia'.");
         }
 
-        const wallet = new ethers.Wallet(PRIVATE_KEY, provider);
+        const wallet = new ethers.Wallet(ETH_PRIVATE_KEY, provider);
         console.log("Sender Address:", wallet.address);
-
-        const parsedAmount = parseFloat(amount);
-        if (isNaN(parsedAmount) || parsedAmount <= 0) {
-            throw new Error("Invalid amount. Must be a positive number in ETH.");
-        }
 
         const transactionHashes: string[] = [];
 
@@ -37,7 +42,7 @@ export async function sendEthToMultiple(recipients: { address: string }[], netwo
 
             const tx = await wallet.sendTransaction({
                 to: address,
-                value: ethers.parseUnits(amount, "ether"),
+                value: ethers.parseUnits(amount, "wei"),
             });
 
             console.log(`Transaction Sent to ${address}! Hash:`, tx.hash);

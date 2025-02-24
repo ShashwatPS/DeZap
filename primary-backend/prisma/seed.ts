@@ -74,6 +74,30 @@ async function main() {
             image: "https://w7.pngwing.com/pngs/968/208/png-transparent-ethereum-logos-brands-icon.png"
         }
     })
+
+    await prismaClient.availableAction.upsert({
+        where: {
+            id: "create-offer",
+        },
+        update: {},
+        create: {
+            id: "create-offer",
+            name: "Create Offer",
+            image: "https://openseauserdata.com/files/015be3ac02026904d98dbfd3213ef555.svg"
+        }
+    })
+
+    await prismaClient.availableAction.upsert({
+        where: {
+            id: "create-listing",
+        },
+        update: {},
+        create: {
+            id: "create-listing",
+            name: "Create Listing",
+            image: "https://openseauserdata.com/files/015be3ac02026904d98dbfd3213ef555.svg"
+        }
+    })
 }
 
 main();
