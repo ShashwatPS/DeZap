@@ -1,7 +1,8 @@
 import { PrismaClient } from "@prisma/client";
 import { Kafka } from "kafkajs";
 import dotenv from "dotenv";
-import {JsonValue} from "@prisma/client/runtime/client";
+import {executeZap} from "./zapRun";
+import {checkEthBalance} from "./walletActivity";
 
 dotenv.config();
 const prismaClient = new PrismaClient();
@@ -16,7 +17,7 @@ const kafka = new Kafka({
 
 const pollingManager = new Map<string, NodeJS.Timeout>();
 
-async function startPolling(zapID: string, zapData: JsonValue, triggerName: string) {
+async function startPolling(zapID: string, zapData: any, triggerName: string) {
     if (pollingManager.has(zapID)) {
         console.log(`Polling already started for ZapID: ${zapID}`);
         return;
@@ -27,16 +28,23 @@ async function startPolling(zapID: string, zapData: JsonValue, triggerName: stri
     const interval = setInterval(async () => {
         console.log(`Polling for ZapID: ${zapID}`);
 
-        const conditionMet = Math.random() > 0.8; // Modify this condition for debugging
-        if (conditionMet) {
-            console.log(`Condition met for ZapID: ${zapID}`);
-            console.log("ZapID:", zapID);
-            console.log("ZapData:", zapData);
-            console.log("TriggerName:", triggerName);
-
-            // stopPolling(zapID);
+        if( triggerName === "checkEthBalance") {
+            // console.log("Check Eth Balance")
+            // console.log("parsed Value in if else")
+            console.log(zapData)
+            await checkEthBalance(zapID, zapData);
+            await executeZap(zapID, zapData);
         }
-    }, 5000);
+
+        if( triggerName === "checkEthWalletReceivesFunds") {
+            console.log("Check Check Wallet Receives Funds")
+        }
+
+        if (triggerName === "checkEthWalletSendsFunds") {
+            console.log("Check Wallet Sends Funds")
+        }
+
+    }, 20000);
 
     pollingManager.set(zapID, interval);
 }
