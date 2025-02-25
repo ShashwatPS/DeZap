@@ -1,5 +1,5 @@
 import { ethers } from "ethers";
-import {ethConnectionGoerli, ethConnectionMain, ethConnectionSepolia} from './constants'
+import {ethConnectionGoerli, ethConnectionMain, ethConnectionSepolia, alchemyAPI} from './constants'
 
 export const ethGasPrice = async (zapID: string, zapData: any): Promise<boolean> => {
     const { network, expectedPrice } = zapData;
