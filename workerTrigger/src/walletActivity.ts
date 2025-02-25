@@ -26,8 +26,11 @@ export const checkEthBalance= async (zapID: string, zapData: any)=> {
         }
         const balance = await provider.getBalance(address);
         const currentBal = ethers.parseUnits(balance.toString(), unit).toString();
-        console.log(`Current Balance: ${currentBal}`);
-        if (currentBal < bal) {
+        
+        const currentbalFloat = parseFloat(currentBal);
+        const balFloat = parseFloat(bal);
+        
+        if (currentbalFloat < balFloat) {
             return true;
         } else {    
             return  false;
