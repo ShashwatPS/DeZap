@@ -10,6 +10,24 @@ services:
     env_file:
       - .env
 
+  my-workertrigger:
+    build:
+      context: ./workerTrigger
+    depends_on:
+      my-pb:
+        condition: service_healthy
+    env_file:
+      - .env
+
+  my-processortrigger:
+    build:
+      context: ./processorTrigger
+    depends_on:
+      my-pb:
+        condition: service_healthy
+    env_file:
+      - .env
+
   my-pb:
     build:
       context: ./primary-backend

@@ -40,12 +40,21 @@ router.post("/", authMiddleware, async (req, res) => {
             }
         });
 
+        if( parsedData.data.availableTriggerId != "webhook") {
+            await tx.zapRunTrigger.create({
+                data: {
+                triggerId: trigger.id,
+                }
+            })
+        }
+
         await tx.zap.update({
             where: {
                 id: zap.id
             },
             data: {
-                triggerId: trigger.id
+                triggerId: trigger.id,
+                metadata: parsedData.data.triggerMetadata
             }
         })
 
