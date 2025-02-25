@@ -4,6 +4,8 @@ import dotenv from "dotenv";
 import {executeZap} from "./zapRun";
 import {checkEthBalance, checkEthWalletReceivesFunds, checkEthWalletSendsFunds } from "./walletActivity";
 import {ethGasPrice} from "./priceConditions";
+import {NFTFloorPrice} from "./NFTFloorPrice";
+import {checkFunctionCalled} from "./checkFunction";
 
 dotenv.config();
 const prismaClient = new PrismaClient();
@@ -55,6 +57,20 @@ async function startPolling(zapID: string, zapData: any, triggerName: string) {
             const val = await ethGasPrice(zapID, zapData);
             if (val) await executeZap(zapID, zapData);
             else console.log("Price Still High for Gas")
+        }
+
+        if( triggerName === "NFTFloorPrice" ){
+            console.log("Check NFT Floor Price")
+            const val = await NFTFloorPrice(zapID, zapData);
+            if(val && val.result) await executeZap(zapID, val);
+            else console.log("Price is not below/above the certain amount")
+        }
+
+        if(triggerName === "checkFunctionCalled"){
+            console.log("Check what function is called")
+            const val = await checkFunctionCalled(zapID,zapData);
+            if(val) await executeZap(zapID, zapData);
+            else console.log("Function not called")
         }
 
     }, 20000);
