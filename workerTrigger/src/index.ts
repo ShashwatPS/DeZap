@@ -1,6 +1,7 @@
 import { PrismaClient } from "@prisma/client";
 import { Kafka } from "kafkajs";
 import dotenv from "dotenv";
+import {JsonValue} from "@prisma/client/runtime/client";
 
 dotenv.config();
 const prismaClient = new PrismaClient();
@@ -15,20 +16,25 @@ const kafka = new Kafka({
 
 const pollingManager = new Map<string, NodeJS.Timeout>();
 
-async function startPolling(zapID: string, zapData: any) {
+async function startPolling(zapID: string, zapData: JsonValue, triggerName: string) {
+    if (pollingManager.has(zapID)) {
+        console.log(`Polling already started for ZapID: ${zapID}`);
+        return;
+    }
+
+    console.log(`Starting polling for ZapID: ${zapID}`);
+
     const interval = setInterval(async () => {
-        if(pollingManager.has(zapID)) {
-            return;
-        }
         console.log(`Polling for ZapID: ${zapID}`);
 
-        // Add your polling logic here
-        // If a certain condition is met, stop polling and return a result
-
-        const conditionMet = Math.random() > 0.8;
+        const conditionMet = Math.random() > 0.8; // Modify this condition for debugging
         if (conditionMet) {
             console.log(`Condition met for ZapID: ${zapID}`);
+            console.log("ZapID:", zapID);
+            console.log("ZapData:", zapData);
+            console.log("TriggerName:", triggerName);
 
+            // stopPolling(zapID);
         }
     }, 5000);
 
@@ -73,10 +79,12 @@ async function main() {
                 include: { zap: true }
             });
 
+
             if (zapData) {
-                console.log("ZapID: ", zapData.zap.id);
-                console.log("ZapData", zapData.zap.metadata);
-                startPolling(zapData.zap.id, zapData.zap.metadata);
+                // console.log("ZapID: ", zapData.zap.id);
+                // console.log("ZapData", zapData.zap.metadata);
+                // console.log("TriggerName", zapData)
+                startPolling(zapData.zap.id, zapData.zap.metadata, zapData.triggerId);
             }
 
             console.log("Processing done");
