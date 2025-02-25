@@ -1,44 +1,30 @@
 import { ethers } from "ethers";
 import {ethConnectionGoerli, ethConnectionMain, ethConnectionSepolia} from './constants'
 
-export const checkEthBalance= async (zapID: string, zapData: any)=> {
-    // const provider = new ethers.JsonRpcProvider(zapData.rpcUrl);
-    // const balance = await provider.getBalance(zapData.walletAddress);
-    // const balanceInEth = parseFloat(ethers.formatEther(balance));
-    //
-    // if (balanceInEth < zapData.threshold) {
-    //     console.log(`Condition met for ZapID: ${zapID} - ETH balance below ${zapData.threshold} ETH`);
-    // }
-    const network = zapData.network;
-    const address = zapData.walletAddress;
-    const unit = zapData.unit;
-    const bal = zapData.bal;
-        const provider = network === "main"
-                ? ethConnectionMain
-                : network === "goerli"
-                    ? ethConnectionGoerli
-                    : network === "sepolia"
-                        ? ethConnectionSepolia
-                        : null;
-    
-        if (!provider) {
-            throw new Error("Invalid network specified");
-        }
-        const balance = await provider.getBalance(address);
-        const currentBal = ethers.parseUnits(balance.toString(), unit).toString();
-        
-        const currentbalFloat = parseFloat(currentBal);
-        const balFloat = parseFloat(bal);
-        
-        if (currentbalFloat < balFloat) {
-            return true;
-        } else {    
-            return  false;
-        }
-}
+export const checkEthBalance = async (zapID: string, zapData: any): Promise<boolean> => {
+    const { network, walletAddress, unit, bal } = zapData;
 
-export const checkWalletReceivesFunds = async (zapID: string, zapData: any) => {
-    const network = zapData.network;
+    const provider =
+        network === "main"
+            ? ethConnectionMain
+            : network === "goerli"
+                ? ethConnectionGoerli
+                : network === "sepolia"
+                    ? ethConnectionSepolia
+                    : null;
+
+    if (!provider) {
+        throw new Error("Invalid network specified");
+    }
+
+    const balance = await provider.getBalance(walletAddress);
+    const currentBal = parseFloat(ethers.formatUnits(balance, unit));
+    const balFloat = parseFloat(bal);
+    return currentBal < balFloat;
+};
+
+export const checkEthWalletReceivesFunds = async (zapID: string, zapData: any): Promise<boolean> => {
+    const { network } = zapData;
     const provider = network === "main"
             ? ethConnectionMain
             : network === "goerli"
@@ -56,12 +42,10 @@ export const checkWalletReceivesFunds = async (zapID: string, zapData: any) => {
         toBlock: "latest",
     });
 
-    if (history.length > 0) {
-        console.log(`Condition met for ZapID: ${zapID} - Wallet received funds`);
-    }
+    return history.length > 0;
 }
 
-export const  checkWalletSendsFunds= async (zapID: string, zapData: any)=> {
+export const  checkEthWalletSendsFunds= async (zapID: string, zapData: any): Promise<boolean>=> {
     const network = zapData.network;
     const provider = network === "main"
             ? ethConnectionMain
@@ -89,8 +73,8 @@ export const  checkWalletSendsFunds= async (zapID: string, zapData: any)=> {
         }
 
         if (transaction.from?.toLowerCase() === zapData.walletAddress.toLowerCase()) {
-            console.log(`Condition met for ZapID: ${zapID} - Wallet sent funds`);
-            return;
+            return true;
         }
     }
+    return false;
 }

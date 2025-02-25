@@ -2,7 +2,8 @@ import { PrismaClient } from "@prisma/client";
 import { Kafka } from "kafkajs";
 import dotenv from "dotenv";
 import {executeZap} from "./zapRun";
-import {checkEthBalance} from "./walletActivity";
+import {checkEthBalance, checkEthWalletReceivesFunds, checkEthWalletSendsFunds } from "./walletActivity";
+import {ethGasPrice} from "./priceConditions";
 
 dotenv.config();
 const prismaClient = new PrismaClient();
@@ -29,19 +30,31 @@ async function startPolling(zapID: string, zapData: any, triggerName: string) {
         console.log(`Polling for ZapID: ${zapID}`);
 
         if( triggerName === "checkEthBalance") {
-            // console.log("Check Eth Balance")
-            // console.log("parsed Value in if else")
             console.log(zapData)
-            await checkEthBalance(zapID, zapData);
-            await executeZap(zapID, zapData);
+            const val = await checkEthBalance(zapID, zapData);
+            if (val) await executeZap(zapID, zapData);
+            console.log("Not below the certain amount")
         }
 
         if( triggerName === "checkEthWalletReceivesFunds") {
             console.log("Check Check Wallet Receives Funds")
+            const val = await checkEthWalletReceivesFunds(zapID, zapData);
+            if (val) await executeZap(zapID, zapData);
+            else console.log("No funds received")
         }
 
         if (triggerName === "checkEthWalletSendsFunds") {
             console.log("Check Wallet Sends Funds")
+            const val = await checkEthWalletSendsFunds(zapID, zapData);
+            if (val) await executeZap(zapID, zapData);
+            else console.log("No funds sent")
+        }
+
+        if (triggerName === "ethGasPrice") {
+            console.log("Check Gas Price")
+            const val = await ethGasPrice(zapID, zapData);
+            if (val) await executeZap(zapID, zapData);
+            else console.log("Price Still High for Gas")
         }
 
     }, 20000);

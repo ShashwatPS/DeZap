@@ -1,9 +1,8 @@
 import { ethers } from "ethers";
 import {ethConnectionGoerli, ethConnectionMain, ethConnectionSepolia} from './constants'
 
-export const ethGasPrice = async (zapID: string, zapData: any) => {
-    const network = zapData.network;
-    const expectedPrice = zapData.expectedPrice;
+export const ethGasPrice = async (zapID: string, zapData: any): Promise<boolean> => {
+    const { network, expectedPrice } = zapData;
     const provider = network === "main"
             ? ethConnectionMain
             : network === "goerli"
@@ -25,7 +24,5 @@ export const ethGasPrice = async (zapID: string, zapData: any) => {
 
     const gasPriceFloat = parseFloat(gasPriceInGwei);
     const expectedPriceFloat = parseFloat(expectedPrice);
-    if (gasPriceFloat < expectedPriceFloat) {
-        return true;
-    }
+    return gasPriceFloat < expectedPriceFloat
 }

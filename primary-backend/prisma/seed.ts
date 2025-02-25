@@ -54,6 +54,18 @@ async function main() {
         }
     })
 
+    await prismaClient.availableTrigger.upsert({
+        where: {
+            id: "ethGasPrice"
+        },
+        update: {},
+        create: {
+            id: "ethGasPrice",
+            name: "Check Eth Gas Price",
+            image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRIovxkR9l-OlwpjTXV1B4YNh0W_s618ijxAQ&s",
+        }
+    })
+
     await prismaClient.availableAction.upsert({
         where: {
             id: "email",
