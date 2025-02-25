@@ -1,106 +1,223 @@
-'use client';
+"use client"
 
-import {
-    ReactFlow, Controls, Background, applyNodeChanges,
-    applyEdgeChanges, MarkerType, Handle, Position
-} from '@xyflow/react';
-import '@xyflow/react/dist/style.css';
-import { useState, useEffect, useRef } from 'react';
-import { Zap } from 'lucide-react';
-import { Button } from "@/components/ui/button";
-import { Drawer, DrawerClose, DrawerContent, DrawerFooter, DrawerHeader, DrawerTrigger } from "@/components/ui/drawer";
-import { Input } from "@/components/ui/input";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Search, Code, Mail, Rss, Calendar, Table } from "lucide-react";
+import { ReactFlow, Controls, Background, applyNodeChanges } from "@xyflow/react"
+import "@xyflow/react/dist/style.css"
+import { useState, useEffect, useRef } from "react"
+import { Zap } from "lucide-react"
+import { Button } from "@/components/ui/button"
+import { Drawer, DrawerClose, DrawerContent, DrawerFooter, DrawerHeader } from "@/components/ui/drawer"
+import { Input } from "@/components/ui/input"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { Search, Code, Mail, Rss, Calendar, Table } from "lucide-react"
+import CalendarForm from "@/components/ui/calendar-form"
+import Draggable from "react-draggable"
 
 // Custom Node Component
 const triggerNode = ({ data }) => {
     return (
-        <button onClick={data.onClick} style={{ padding: 10, border: '2px dotted #201515', borderRadius: 10, background: '#fff' }}>
-            <div style={{ margin: 1, backgroundColor: '#ECE9DF', padding: 5, borderRadius: 5, width: 'fit-content', border: '1px solid black', display: 'flex', alignItems: 'center', marginBottom: 5 }}>
-                <div style={{ marginRight: 5 }}>
-                    <Zap className='m-1' fill='#ECE9DF' size={15} />
-                </div>
-                <span style={{ fontWeight: '600', fontSize: 15 }}>
-                    {data.label}
-                </span>
+        <button
+            onClick={data.onClick}
+            style={{ padding: 10, border: "2px dotted #201515", borderRadius: 10, background: "#fff" }}
+        >
+            <div
+                style={{
+                    margin: 1,
+                    backgroundColor: "#ECE9DF",
+                    padding: 5,
+                    borderRadius: 5,
+                    width: "fit-content",
+                    border: "1px solid black",
+                    display: "flex",
+                    alignItems: "center",
+                    marginBottom: 5,
+                }}
+            >
+                <div style={{ marginRight: 5 }}>{data.icon}</div>
+                <span style={{ fontWeight: "600", fontSize: 15 }}>{data.label}</span>
             </div>
-            <div className='mr-2 ml-2 mt-2 font-medium'>
-                <span style={{ fontWeight: 'bold', marginRight: 2 }}>1.</span><span style={{ color: '#88827e' }}>{data.info}</span>
+            <div className="mr-2 ml-2 mt-2 font-medium">
+                <span style={{ fontWeight: "bold", marginRight: 2 }}>1.</span>
+                <span style={{ color: "#88827e" }}>{data.info}</span>
             </div>
         </button>
-    );
-};
+    )
+}
 
 const ActionNode = ({ data }) => {
     return (
-        <button onClick={data.onClick} style={{ padding: 10, border: '2px dotted #000000', borderRadius: 5, background: '#fff' }}>
-            <div style={{ margin: 1, backgroundColor: '#ECE9DF', padding: 5, borderRadius: 3, width: 'fit-content', border: '1px solid black', display: 'flex', alignItems: 'center', marginBottom: 5 }}>
+        <button
+            onClick={data.onClick}
+            style={{ padding: 10, border: "2px dotted #000000", borderRadius: 5, background: "#fff" }}
+        >
+            <div
+                style={{
+                    margin: 1,
+                    backgroundColor: "#ECE9DF",
+                    padding: 5,
+                    borderRadius: 3,
+                    width: "fit-content",
+                    border: "1px solid black",
+                    display: "flex",
+                    alignItems: "center",
+                    marginBottom: 5,
+                }}
+            >
                 <div style={{ marginRight: 5 }}>
-                    <Zap className='m-1' fill='#ECE9DF' size={15} />
+                    <Zap className="m-1" fill="#ECE9DF" size={15} />
                 </div>
-                <span style={{ fontWeight: 'bold', fontSize: 15 }}>
-                    {data.label}
-                </span>
+                <span style={{ fontWeight: "bold", fontSize: 15 }}>{data.label}</span>
             </div>
-            <div className='m-2 font-medium'>
-                <span style={{ fontWeight: 'bold', marginRight: 2 }}>1.</span><span style={{ color: '#88827e' }}> Select the Trigger to Start the DeZap</span>
+            <div className="m-2 font-medium">
+                <span style={{ fontWeight: "bold", marginRight: 2 }}>1.</span>
+                <span style={{ color: "#88827e" }}> Select the Trigger to Start the DeZap</span>
             </div>
         </button>
-    );
-};
+    )
+}
+
+const EventNode = ({ data }) => {
+    return (
+        <button
+            onClick={data.onClick}
+            style={{ padding: 10, border: "2px solid #000000", borderRadius: 5, background: "#fff" }}
+        >
+            <div
+                style={{
+                    margin: 1,
+                    backgroundColor: "#ECE9DF",
+                    padding: 5,
+                    borderRadius: 3,
+                    width: "fit-content",
+                    border: "1px solid black",
+                    display: "flex",
+                    alignItems: "center",
+                    marginBottom: 5,
+                }}
+            >
+                <div style={{ marginRight: 5 }}>{data.icon}</div>
+                <span style={{ fontWeight: "bold", fontSize: 15 }}>{data.label}</span>
+            </div>
+            <div className="m-2 font-medium">
+                <span style={{ fontWeight: "bold", marginRight: 2 }}>1.</span>
+                <span style={{ color: "#88827e" }}>{data.info}</span>
+            </div>
+        </button>
+    )
+}
 
 const nodeTypes = {
     trigger: triggerNode,
-    action: ActionNode
-};
+    action: ActionNode,
+    event: EventNode,
+}
 
 function Flow() {
-
-    const handleNodeClick = () => {
-        if (!triggerAppSet) {
-            console.log('Trigger App not set');
-            setIsDrawerOpen(true);
+    const handleNodeClick = (event, node) => {
+        if (node && node.data) {
+            if (!node.data.triggerAppSet) {
+                console.log("Node Clicked", node.data.triggerAppSet)
+                setIsDrawerOpen(true)
+            } else {
+                setFormContent(node.data)
+                setIsFormOpen(true)
+            }
         }
-    };
+    }
+
+    const [selectedApp, setSelectedApp] = useState(null)
+    const [isFormOpen, setIsFormOpen] = useState(false)
+    const [formContent, setFormContent] = useState(null)
+
+    const handleAppSelect = (app) => {
+        setSelectedApp(app)
+        setNodes((nds) =>
+            nds.map((node) =>
+                node.id === "1"
+                    ? {
+                        ...node,
+                        type: "event",
+                        data: {
+                            ...node.data,
+                            label: app.name,
+                            icon: app.icon,
+                            info: "Select the Event",
+                            triggerAppSet: true,
+                        },
+                    }
+                    : node,
+            ),
+        )
+        setIsDrawerOpen(false)
+        console.log("App Selected:", app.name)
+    }
 
     const [nodes, setNodes] = useState([
         {
-            id: '1',
-            type: 'trigger', // Use custom node type
+            id: "1",
+            type: "trigger", // Use custom node type
             data: {
-                label: 'Trigger',
-                info: ' Select the Trigger to Start the DeZap',
-                onClick: handleNodeClick
+                label: "Trigger",
+                info: " Select the Trigger to Start the DeZap",
+                onClick: handleNodeClick,
+                icon: <Zap className="m-1" fill="#ECE9DF" size={15} />,
+                triggerAppSet: false,
             }, // Replace emoji with symbol
             position: { x: 0, y: 0 },
         },
-    ]);
+    ])
 
-    const containerRef = useRef(null);
-    const [triggerAppSet, setTriggerAppSet] = useState(false);
-    const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+    const containerRef = useRef(null)
+    const [isDrawerOpen, setIsDrawerOpen] = useState(false)
+    const formRef = useRef(null)
 
     useEffect(() => {
         if (containerRef.current) {
-            const { clientWidth, clientHeight } = containerRef.current;
+            const { clientWidth, clientHeight } = containerRef.current
             setNodes((nds) =>
                 nds.map((node) => ({
                     ...node,
                     position: { x: clientWidth / 2 - 50, y: clientHeight / 2 - 25 }, // Adjust for node dimensions
-                }))
-            );
+                })),
+            )
         }
-    }, [containerRef.current]);
+    }, [containerRef.current])
 
-    const onNodesChange = (changes) => setNodes((nds) => applyNodeChanges(changes, nds));
+    const onNodesChange = (changes) => setNodes((nds) => applyNodeChanges(changes, nds))
 
     return (
-        <div ref={containerRef} style={{ height: '100%', width: '100%' }}>
-            <ReactFlow nodes={nodes} onNodesChange={onNodesChange} nodeTypes={nodeTypes} style={{ backgroundColor: '#f9f7f3' }} onNodeClick={handleNodeClick}>
+        <div ref={containerRef} style={{ height: "100%", width: "100%" }}>
+            <ReactFlow
+                nodes={nodes}
+                onNodesChange={onNodesChange}
+                nodeTypes={nodeTypes}
+                style={{ backgroundColor: "#f9f7f3" }}
+                onNodeClick={handleNodeClick}
+            >
                 <Background />
                 <Controls />
             </ReactFlow>
+            {isFormOpen && (
+                <Draggable nodeRef={formRef}>
+                    <div
+                        ref={formRef}
+                        style={{
+                            position: "absolute",
+                            top: "10%",
+                            right: "10%",
+                            background: "#fff",
+                            padding: 20,
+                            borderRadius: 10,
+                            boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)",
+                            width: "300px",
+                            cursor: "move",
+                        }}
+                    >
+                        <div className="max-w-xl">
+                            <CalendarForm onClose={() => setIsFormOpen(false)} />
+                        </div>
+                    </div>
+                </Draggable>
+            )}
             <Drawer open={isDrawerOpen} onClose={() => setIsDrawerOpen(false)}>
                 <DrawerContent>
                     <div className="mx-auto w-full max-w-4xl p-4">
@@ -132,7 +249,12 @@ function Flow() {
                                         { name: "Notion", icon: "📓" },
                                         { name: "Slack", icon: "💬" },
                                     ].map((app) => (
-                                        <Button key={app.name} variant="ghost" className="w-full justify-start">
+                                        <Button
+                                            key={app.name}
+                                            variant="ghost"
+                                            className="w-full justify-start"
+                                            onClick={() => handleAppSelect(app)}
+                                        >
                                             <span className="mr-2">{typeof app.icon === "string" ? app.icon : app.icon}</span>
                                             {app.name}
                                         </Button>
@@ -151,7 +273,12 @@ function Flow() {
                                         { name: "Email Parser", icon: "📨" },
                                         { name: "Sub-Zap", icon: "⚡" },
                                     ].map((tool) => (
-                                        <Button key={tool.name} variant="ghost" className="w-full justify-start">
+                                        <Button
+                                            key={tool.name}
+                                            variant="ghost"
+                                            className="w-full justify-start"
+                                            onClick={() => handleAppSelect(tool)}
+                                        >
                                             <span className="mr-2">{typeof tool.icon === "string" ? tool.icon : tool.icon}</span>
                                             {tool.name}
                                         </Button>
@@ -166,7 +293,12 @@ function Flow() {
                                         { name: "Interfaces", icon: "🖥️" },
                                         { name: "Tables", icon: <Table className="h-4 w-4" /> },
                                     ].map((product) => (
-                                        <Button key={product.name} variant="ghost" className="w-full justify-start">
+                                        <Button
+                                            key={product.name}
+                                            variant="ghost"
+                                            className="w-full justify-start"
+                                            onClick={() => handleAppSelect(product)}
+                                        >
                                             <span className="mr-2">{typeof product.icon === "string" ? product.icon : product.icon}</span>
                                             {product.name}
                                         </Button>
@@ -186,7 +318,8 @@ function Flow() {
                 </DrawerContent>
             </Drawer>
         </div>
-    );
+    )
 }
 
-export default Flow;
+export default Flow
+
