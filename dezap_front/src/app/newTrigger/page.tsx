@@ -11,12 +11,26 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Search, Code, Mail, Rss, Calendar, Table } from "lucide-react"
 import CalendarForm from "@/components/ui/calendar-form"
 import Draggable from "react-draggable"
+import axios from "axios"
+interface NodeData {
+    label: string;
+    info: string;
+    onClick: (event: React.MouseEvent<HTMLButtonElement>, node: Node) => void;
+    icon: React.ReactNode;
+    triggerAppSet: boolean;
+}
 
+interface Node {
+    id: string;
+    type: string;
+    data: NodeData;
+    position: { x: number; y: number };
+}``
 // Custom Node Component
-const triggerNode = ({ data }) => {
+const triggerNode = ({ data }: { data: NodeData }) => {
     return (
         <button
-            onClick={data.onClick}
+            onClick={(event) => data.onClick(event, { id: "", type: "", data, position: { x: 0, y: 0 } })}
             style={{ padding: 10, border: "2px dotted #201515", borderRadius: 10, background: "#fff" }}
         >
             <div
@@ -43,10 +57,10 @@ const triggerNode = ({ data }) => {
     )
 }
 
-const ActionNode = ({ data }) => {
+const ActionNode = ({ data }: { data: NodeData }) => {
     return (
         <button
-            onClick={data.onClick}
+            onClick={(event) => data.onClick(event, { id: "", type: "", data, position: { x: 0, y: 0 } })}
             style={{ padding: 10, border: "2px dotted #000000", borderRadius: 5, background: "#fff" }}
         >
             <div
@@ -75,10 +89,10 @@ const ActionNode = ({ data }) => {
     )
 }
 
-const EventNode = ({ data }) => {
+const EventNode = ({ data }: { data: NodeData }) => {
     return (
         <button
-            onClick={data.onClick}
+            onClick={(event) => data.onClick(event, { id: "", type: "", data, position: { x: 0, y: 0 } })}
             style={{ padding: 10, border: "2px solid #000000", borderRadius: 5, background: "#fff" }}
         >
             <div
@@ -112,7 +126,9 @@ const nodeTypes = {
 }
 
 function Flow() {
-    const handleNodeClick = (event, node) => {
+
+
+    const handleNodeClick = (event: React.MouseEvent<HTMLButtonElement>, node: Node) => {
         if (node && node.data) {
             if (!node.data.triggerAppSet) {
                 console.log("Node Clicked", node.data.triggerAppSet)
@@ -124,11 +140,18 @@ function Flow() {
         }
     }
 
-    const [selectedApp, setSelectedApp] = useState(null)
+    const [selectedApp, setSelectedApp] = useState<App | null>(null)
     const [isFormOpen, setIsFormOpen] = useState(false)
-    const [formContent, setFormContent] = useState(null)
+    const [formContent, setFormContent] = useState<NodeData | null>(null)
+    interface App {
+        id: string;
+        name: string;
+        image: string;
+    }
 
-    const handleAppSelect = (app) => {
+    const [availableTriggers, setAvailableTriggers] = useState<App[]>([])
+
+    const handleAppSelect = (app: App) => {
         setSelectedApp(app)
         setNodes((nds) =>
             nds.map((node) =>
@@ -139,7 +162,7 @@ function Flow() {
                         data: {
                             ...node.data,
                             label: app.name,
-                            icon: app.icon,
+                            icon: <img src={app.image} alt={app.name} style={{ width: 20, height: 20 }} />,
                             info: "Select the Event",
                             triggerAppSet: true,
                         },
@@ -150,6 +173,19 @@ function Flow() {
         setIsDrawerOpen(false)
         console.log("App Selected:", app.name)
     }
+
+    useEffect(() => {
+        const fetchTriggers = async () => {
+            try {
+                const response = await axios.get('http://localhost:3000/api/v1/trigger/available')
+                setAvailableTriggers(response.data.availableTriggers)
+            } catch (error) {
+                console.error("Error fetching triggers:", error)
+            }
+        }
+
+        fetchTriggers()
+    }, [])
 
     const [nodes, setNodes] = useState([
         {
@@ -229,33 +265,24 @@ function Flow() {
                         </DrawerHeader>
                         <Tabs defaultValue="apps" className="mt-4">
                             <TabsList className="w-full justify-start">
-                                <TabsTrigger value="apps">Apps</TabsTrigger>
-                                <TabsTrigger value="zapier">Zapier products</TabsTrigger>
+                                <TabsTrigger value="apps">382</TabsTrigger>
+                                <TabsTrigger value="zapier">Products</TabsTrigger>
                                 <TabsTrigger value="tools">Built-in tools</TabsTrigger>
                                 <TabsTrigger value="all">All</TabsTrigger>
                             </TabsList>
                             <TabsContent value="apps" className="mt-4">
                                 <h3 className="mb-4 text-sm text-muted-foreground">Your top apps</h3>
                                 <div className="grid gap-2">
-                                    {[
-                                        { name: "Google Forms", icon: "📝" },
-                                        { name: "Facebook Lead Ads", icon: "📢" },
-                                        { name: "Google Calendar", icon: <Calendar className="h-4 w-4" /> },
-                                        { name: "Google Drive", icon: "📁" },
-                                        { name: "Gmail", icon: "📧" },
-                                        { name: "Google Sheets", icon: "📊" },
-                                        { name: "HubSpot", icon: "🎯" },
-                                        { name: "Mailchimp", icon: "📬" },
-                                        { name: "Notion", icon: "📓" },
-                                        { name: "Slack", icon: "💬" },
-                                    ].map((app) => (
+                                    {availableTriggers.map((app) => (
                                         <Button
-                                            key={app.name}
+                                            key={app.id}
                                             variant="ghost"
                                             className="w-full justify-start"
                                             onClick={() => handleAppSelect(app)}
                                         >
-                                            <span className="mr-2">{typeof app.icon === "string" ? app.icon : app.icon}</span>
+                                            <span className="mr-2">
+                                                <img src={app.image} alt={app.name} style={{ width: 20, height: 20 }} />
+                                            </span>
                                             {app.name}
                                         </Button>
                                     ))}
