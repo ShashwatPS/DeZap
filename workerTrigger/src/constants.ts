@@ -1,12 +1,3 @@
-// import { PublicKey, Connection } from '@solana/web3.js';
-//
-//
-//
-// export async function getBalance(walletAddress: string): Promise<number> {
-//     const publicKey = new PublicKey(walletAddress);
-//     return await connection.getBalance(publicKey);
-// }
-
 import {Connection} from "@solana/web3.js";
 import {ethers} from "ethers";
 
@@ -27,11 +18,3 @@ export const alchemyAPI = "qv5hYYVTUkqsMmWwFF0DZVZBz4ZNHvpG"
 //     address: '0xE8C528968752A8baB599285aEf124c3f261627C9'
 // }
 
-
-// const provider = network === "main"
-//     ? new ethers.JsonRpcProvider("https://mainnet.infura.io/v3/6ce829e164e74c03822ca2e3dfb06598")
-//     : network === "goerli"
-//         ? new ethers.JsonRpcProvider("https://goerli.infura.io/v3/6ce829e164e74c03822ca2e3dfb06598")
-//         : network === "sepolia"
-//             ? new ethers.JsonRpcProvider("https://sepolia.infura.io/v3/6ce829e164e74c03822ca2e3dfb06598")
-//             : null;
