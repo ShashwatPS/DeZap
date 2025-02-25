@@ -1,5 +1,5 @@
 import { ethers } from "ethers";
-
+import {ethConnectionGoerli, ethConnectionMain, ethConnectionSepolia} from './constants'
 
 export const checkEthBalance= async (zapID: string, zapData: any)=> {
     // const provider = new ethers.JsonRpcProvider(zapData.rpcUrl);
@@ -9,13 +9,43 @@ export const checkEthBalance= async (zapID: string, zapData: any)=> {
     // if (balanceInEth < zapData.threshold) {
     //     console.log(`Condition met for ZapID: ${zapID} - ETH balance below ${zapData.threshold} ETH`);
     // }
-    console.log("Inside Check Eth Balance")
-    console.log("Normal Data: ",zapData.data)
-    console.log("Parsed Data: ",zapData)
+    const network = zapData.network;
+    const address = zapData.walletAddress;
+    const unit = zapData.unit;
+    const bal = zapData.bal;
+        const provider = network === "main"
+                ? ethConnectionMain
+                : network === "goerli"
+                    ? ethConnectionGoerli
+                    : network === "sepolia"
+                        ? ethConnectionSepolia
+                        : null;
+    
+        if (!provider) {
+            throw new Error("Invalid network specified");
+        }
+        const balance = await provider.getBalance(address);
+        const currentBal = ethers.parseUnits(balance.toString(), unit).toString();
+        console.log(`Current Balance: ${currentBal}`);
+        if (currentBal < bal) {
+            return true;
+        } else {    
+            return  false;
+        }
 }
 
 export const checkWalletReceivesFunds = async (zapID: string, zapData: any) => {
-    const provider = new ethers.JsonRpcProvider(zapData.rpcUrl);
+    const network = zapData.network;
+    const provider = network === "main"
+            ? ethConnectionMain
+            : network === "goerli"
+                ? ethConnectionGoerli
+                : network === "sepolia"
+                    ? ethConnectionSepolia
+                    : null;
+    if (!provider) {
+        throw new Error("Invalid network specified");
+    }
     const latestBlock = await provider.getBlockNumber();
     const history = await provider.getLogs({
         address: zapData.walletAddress,
@@ -29,7 +59,17 @@ export const checkWalletReceivesFunds = async (zapID: string, zapData: any) => {
 }
 
 export const  checkWalletSendsFunds= async (zapID: string, zapData: any)=> {
-    const provider = new ethers.JsonRpcProvider(zapData.rpcUrl);
+    const network = zapData.network;
+    const provider = network === "main"
+            ? ethConnectionMain
+            : network === "goerli"
+                ? ethConnectionGoerli
+                : network === "sepolia"
+                    ? ethConnectionSepolia
+                    : null;
+    if (!provider) {
+        throw new Error("Invalid network specified");
+    }
     const latestBlock = await provider.getBlockNumber();
     const history = await provider.getLogs({
         address: zapData.walletAddress,

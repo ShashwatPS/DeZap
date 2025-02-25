@@ -3,6 +3,7 @@ import { PrismaClient } from '@prisma/client'
 const client = new PrismaClient();
 
 export const executeZap = async (zapId: string, metadata: any) => {
+    // @ts-ignore
     await client.$transaction(async tx => {
         const run = await tx.zapRun.create({
             data: {
