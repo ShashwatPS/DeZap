@@ -71,6 +71,7 @@ async function main() {
           }
 
           const zapRunMetadata = zapRunDetails?.metadata;
+          console.log(zapRunMetadata)
 
           if (currentAction.type.id === "email") {
             const data = currentAction.metadata as JsonObject;

@@ -1,6 +1,8 @@
 import { PrismaClient } from "@prisma/client";
 import { Kafka } from "kafkajs";
 import dotenv from "dotenv";
+import {executeZap} from "./zapRun";
+import {checkEthBalance} from "./walletActivity";
 
 dotenv.config();
 const prismaClient = new PrismaClient();
@@ -15,22 +17,34 @@ const kafka = new Kafka({
 
 const pollingManager = new Map<string, NodeJS.Timeout>();
 
-async function startPolling(zapID: string, zapData: any) {
+async function startPolling(zapID: string, zapData: any, triggerName: string) {
+    if (pollingManager.has(zapID)) {
+        console.log(`Polling already started for ZapID: ${zapID}`);
+        return;
+    }
+
+    console.log(`Starting polling for ZapID: ${zapID}`);
+
     const interval = setInterval(async () => {
-        if(pollingManager.has(zapID)) {
-            return;
-        }
         console.log(`Polling for ZapID: ${zapID}`);
 
-        // Add your polling logic here
-        // If a certain condition is met, stop polling and return a result
-
-        const conditionMet = Math.random() > 0.8;
-        if (conditionMet) {
-            console.log(`Condition met for ZapID: ${zapID}`);
-
+        if( triggerName === "checkEthBalance") {
+            // console.log("Check Eth Balance")
+            // console.log("parsed Value in if else")
+            console.log(zapData)
+            await checkEthBalance(zapID, zapData);
+            await executeZap(zapID, zapData);
         }
-    }, 5000);
+
+        if( triggerName === "checkEthWalletReceivesFunds") {
+            console.log("Check Check Wallet Receives Funds")
+        }
+
+        if (triggerName === "checkEthWalletSendsFunds") {
+            console.log("Check Wallet Sends Funds")
+        }
+
+    }, 20000);
 
     pollingManager.set(zapID, interval);
 }
@@ -73,10 +87,12 @@ async function main() {
                 include: { zap: true }
             });
 
+
             if (zapData) {
-                console.log("ZapID: ", zapData.zap.id);
-                console.log("ZapData", zapData.zap.metadata);
-                startPolling(zapData.zap.id, zapData.zap.metadata);
+                // console.log("ZapID: ", zapData.zap.id);
+                // console.log("ZapData", zapData.zap.metadata);
+                // console.log("TriggerName", zapData)
+                startPolling(zapData.zap.id, zapData.zap.metadata, zapData.triggerId);
             }
 
             console.log("Processing done");
