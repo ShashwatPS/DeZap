@@ -5,11 +5,13 @@ import Link from "next/link";
 import { useState } from "react";
 import { URL } from "../../constants/url";
 import { useRouter } from "next/navigation";
+import { useAuth } from "@/context/AuthContext";
 
 export default function SignIn() {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const router = useRouter();
+  const { setIsAuthenticated } = useAuth();
 
   const signin = async (e: React.FormEvent) => {
     e.preventDefault(); 
@@ -26,11 +28,12 @@ export default function SignIn() {
     });
 
     if (!response.ok) {
-      throw new Error(`Signup failed: ${response.status} ${response.statusText}`);
+      throw new Error(`Signin failed: ${response.status} ${response.statusText}`);
     }
 
     const data = await response.json();
     localStorage.setItem("token", data.token);
+    setIsAuthenticated(true);
     router.push("/");
   };
 

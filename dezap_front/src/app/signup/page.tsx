@@ -4,12 +4,14 @@ import Link from "next/link";
 import React, { useState } from "react";
 import { URL } from "../../constants/url";
 import { useRouter } from "next/navigation";
+import { useAuth } from "@/context/AuthContext";
 
 export default function SignUp() {
   const [ email, setEmail ] = useState<string>("")  
   const [ password, setPassword ] = useState<string>("");
   const [ name, setName ] = useState<string>("");
 
+  const { setIsAuthenticated } = useAuth();
   const router = useRouter();
 
   const signUp = async(e: React.FormEvent) => { 
@@ -34,6 +36,7 @@ export default function SignUp() {
         const data = await response.json();
         console.log("Signup successful:", data);
         localStorage.setItem("token", data.token);
+        setIsAuthenticated(true);
         router.push("/");
   }
 
