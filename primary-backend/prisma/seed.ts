@@ -24,7 +24,6 @@ async function main() {
             id: "checkEthBalance",
             name: "Check Wallet Balance Eth",
             image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRIovxkR9l-OlwpjTXV1B4YNh0W_s618ijxAQ&s",
-
         }
     })
 
@@ -37,6 +36,7 @@ async function main() {
             id: "checkEthWalletReceivesFunds",
             name: "Check Wallet Receives Funds Eth",
             image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRIovxkR9l-OlwpjTXV1B4YNh0W_s618ijxAQ&s",
+            ca
         }
     })
 
