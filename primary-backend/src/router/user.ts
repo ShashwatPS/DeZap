@@ -34,7 +34,6 @@ router.post("/signup", async (req, res) => {
     await prismaClient.user.create({
         data: {
             email: parsedData.data.username,
-            // TODO: Dont store passwords in plaintext, hash it
             password: parsedData.data.password,
             name: parsedData.data.name
         }
@@ -43,7 +42,7 @@ router.post("/signup", async (req, res) => {
     // await sendEmail();
 
     return res.json({
-        message: "Please verify your account by checking your email"
+        message: "Successfully created account"
     });
 
 })
@@ -71,7 +70,6 @@ router.post("/signin", async (req, res) => {
         })
     }
 
-    // sign the jwt
     const token = jwt.sign({
         id: user.id
     }, JWT_PASSWORD);
