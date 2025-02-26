@@ -25,24 +25,32 @@ export default function Navbar() {
               </div>
               <span className="text-xl font-bold text-gray-900">Dezap</span>
             </Link>
+            {isAuthenticated && (
+              <Link 
+                href="/newTrigger"
+                className="text-gray-600 hover:text-amber-500 transition-colors"
+              >
+                Workflows
+              </Link>
+            )}
+             {isAuthenticated && (
+              <Link 
+                href="/zaps"
+                className="text-gray-600 hover:text-amber-500 transition-colors"
+              >
+                Zaps
+              </Link>
+            )}
           </div>
 
           <div className="flex items-center gap-4">
             {isAuthenticated ? (
-              <>
-                <Link 
-                  href="/newTrigger"
-                  className="text-gray-600 hover:text-amber-500 transition-colors"
-                >
-                  Workflows
-                </Link>
-                <button
-                  onClick={handleSignOut}
-                  className="px-4 py-2 rounded-lg border border-gray-200 text-gray-600 hover:border-amber-200 hover:text-amber-500 transition-all"
-                >
-                  Sign out
-                </button>
-              </>
+              <button
+                onClick={handleSignOut}
+                className="px-4 py-2 rounded-lg border border-gray-200 text-gray-600 hover:border-amber-200 hover:text-amber-500 transition-all"
+              >
+                Sign out
+              </button>
             ) : (
               <>
                 <Link 

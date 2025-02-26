@@ -16,7 +16,7 @@ export default function SignIn() {
   const signin = async (e: React.FormEvent) => {
     e.preventDefault(); 
 
-    const response = await fetch(`${URL}:3000/api/v1/user/signIn`, {
+    const response = await fetch(`${URL}/api/v1/user/signIn`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json"

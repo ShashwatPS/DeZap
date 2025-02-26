@@ -17,7 +17,7 @@ export default function SignUp() {
   const signUp = async(e: React.FormEvent) => { 
     e.preventDefault(); 
 
-        const response = await fetch(`${URL}:3000/api/v1/user/signup`, {
+        const response = await fetch(`${URL}/api/v1/user/signup`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json"
