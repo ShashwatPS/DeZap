@@ -1,14 +1,16 @@
-import Image from "next/image";
+"use client"
+
+import { useRouter } from "next/navigation";
 
 export default function Home() {
+  const router = useRouter();
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-100 via-gray-50 to-gray-100">
-      {/* Background Effects */}
       <div className="absolute inset-0 bg-[linear-gradient(to_right,#e5e7eb66_1px,transparent_1px),linear-gradient(to_bottom,#e5e7eb66_1px,transparent_1px)] bg-[size:24px_24px]" />
       <div className="absolute top-0 right-0 w-1/2 h-screen bg-gradient-to-bl from-amber-500/5 via-white/0 to-transparent opacity-70" />
 
       <main className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-12 pb-16">
-        {/* Hero Section */}
         <div className="text-center lg:text-left lg:flex lg:items-center lg:gap-16">
           <div className="lg:w-1/2">
             <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-amber-50 text-amber-600 text-sm font-medium mb-8 border border-amber-200">
@@ -24,7 +26,7 @@ export default function Home() {
             </p>
             
             <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start mb-16">
-              <button className="px-8 py-4 rounded-lg bg-amber-500 text-white hover:bg-amber-400 transition-all transform hover:-translate-y-0.5 shadow-lg shadow-amber-500/20">
+              <button className="px-8 py-4 rounded-lg bg-amber-500 text-white hover:bg-amber-400 transition-all transform hover:-translate-y-0.5 shadow-lg shadow-amber-500/20" onClick={() => router.push("/signup")}>
                 Start Free Trial
               </button>
               <button className="group px-8 py-4 rounded-lg bg-white backdrop-blur-sm border border-gray-200 text-gray-600 hover:border-amber-200 hover:bg-gray-50 transition-all flex items-center justify-center gap-2">
@@ -36,7 +38,6 @@ export default function Home() {
             </div>
           </div>
 
-          {/* Updated Interface Preview */}
           <div className="hidden lg:block lg:w-1/2">
             <div className="relative h-[500px] w-full">
               <div className="absolute inset-0 bg-gradient-to-r from-amber-100 to-amber-50 rounded-2xl transform rotate-2 opacity-70" />
@@ -87,7 +88,6 @@ export default function Home() {
           </div>
         </div>
 
-        {/* Features Grid - Enhanced YC-style */}
         <div className="grid md:grid-cols-3 gap-8 mt-24">
           {[
             {
@@ -144,7 +144,6 @@ export default function Home() {
 
       </main>
 
-      {/* Footer - Updated colors */}
       <footer className="border-t border-gray-200 mt-20 py-8 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
@@ -156,7 +155,7 @@ export default function Home() {
               ))}
             </div>
             <div className="text-gray-500 text-sm">
-              © 2024 Sezao. All rights reserved.
+              © 2024 Dezap. All rights reserved.
             </div>
           </div>
         </div>

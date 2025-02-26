@@ -41,10 +41,10 @@ export default function SignIn() {
         <div className="absolute inset-0 bg-[linear-gradient(to_right,#e5e7eb66_1px,transparent_1px),linear-gradient(to_bottom,#e5e7eb66_1px,transparent_1px)] bg-[size:24px_24px]" />
         <div className="relative z-10 max-w-xl text-center">
           <div className="inline-flex items-center justify-center p-2 bg-amber-50 rounded-lg mb-6">
-            <span className="text-amber-600 text-sm font-medium">🚀 YC Backed</span>
+            <span className="text-amber-600 text-sm font-medium">🚀 No code automation</span>
           </div>
           <h1 className="text-4xl font-bold text-gray-900 mb-6">Build Something People Want</h1>
-          <p className="text-gray-600 text-lg mb-8">Join thousands of founders who are building the next big thing with Sezao.</p>
+          <p className="text-gray-600 text-lg mb-8">Join thousands of founders who are building the next big thing with Dezap.</p>
         </div>
       </div>
 
@@ -56,7 +56,7 @@ export default function SignIn() {
             <div className="relative bg-gray-50 backdrop-blur-xl border border-gray-200 rounded-2xl p-8">
               <div className="text-center mb-8">
                 <h2 className="text-3xl font-bold text-gray-900 mb-2">Welcome back</h2>
-                <p className="text-gray-600">Sign in to your Sezao account</p>
+                <p className="text-gray-600">Sign in to your Dezap account</p>
               </div>
 
               {/* Form */}
@@ -114,7 +114,7 @@ export default function SignIn() {
 
               <p className="mt-8 text-center text-sm text-gray-600">
                 Don't have an account?{" "}
-                <Link href="/signup" className="text-amber-400 hover:text-amber-300 font-medium">
+                <Link href="/signup" className="text-amber-400 hover:text-amber-300 font-medium" onClick={() => router.push("/signup")}>
                   Sign up
                 </Link>
               </p>

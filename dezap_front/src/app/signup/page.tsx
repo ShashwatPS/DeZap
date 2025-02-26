@@ -3,15 +3,18 @@
 import Link from "next/link";
 import React, { useState } from "react";
 import { URL } from "../../constants/url";
+import { useRouter } from "next/navigation";
 
 export default function SignUp() {
   const [ email, setEmail ] = useState<string>("")  
   const [ password, setPassword ] = useState<string>("");
   const [ name, setName ] = useState<string>("");
 
+  const router = useRouter();
+
   const signUp = async(e: React.FormEvent) => { 
     e.preventDefault(); 
-    try {
+
         const response = await fetch(`${URL}:3000/api/v1/user/signup`, {
           method: "POST",
           headers: {
@@ -23,6 +26,7 @@ export default function SignUp() {
             name
           })
         });
+
         if (!response.ok) {
           throw new Error(`Signup failed: ${response.status} ${response.statusText}`);
         }
@@ -30,33 +34,28 @@ export default function SignUp() {
         const data = await response.json();
         console.log("Signup successful:", data);
         localStorage.setItem("token", data.token);
-        window.location.href = "/";
-      } catch (error) {
-        console.error("Error during signup:", error);
-      }
+        router.push("/");
   }
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-100 via-gray-50 to-gray-100 flex">
-      {/* Left Sidebar */}
       <div className="hidden lg:flex lg:w-1/2 relative p-12 items-center justify-center">
         <div className="absolute inset-0 bg-[linear-gradient(to_right,#e5e7eb66_1px,transparent_1px),linear-gradient(to_bottom,#e5e7eb66_1px,transparent_1px)] bg-[size:24px_24px]" />
         <div className="relative z-10 max-w-xl text-center">
           <div className="inline-flex items-center justify-center p-2 bg-amber-50 rounded-lg mb-6">
-            <span className="text-amber-600 text-sm font-medium">🚀 YC Backed</span>
+            <span className="text-amber-600 text-sm font-medium">🚀 No code automation</span>
           </div>
           <h1 className="text-4xl font-bold text-gray-900 mb-6">Join the Next Generation</h1>
-          <p className="text-gray-600 text-lg mb-8">Create your account and start building the future with Sezao.</p>
+          <p className="text-gray-600 text-lg mb-8">Create your account and start building the future with Dezap.</p>
         </div>
       </div>
 
-      {/* Right Side - Sign Up Form */}
       <div className="flex-1 flex items-center justify-center px-4">
         <div className="w-full max-w-md">
           <div className="relative bg-gray-50 backdrop-blur-xl border border-gray-200 rounded-2xl p-8">
             <div className="text-center mb-8">
               <h2 className="text-3xl font-bold text-gray-900 mb-2">Create an account</h2>
-              <p className="text-gray-600">Start your journey with Sezao</p>
+              <p className="text-gray-600">Start your journey with Dezap</p>
             </div>
 
             <form className="space-y-4" onSubmit={signUp}>
@@ -129,7 +128,7 @@ export default function SignUp() {
 
             <p className="mt-8 text-center text-sm text-gray-600">
               Already have an account?{' '}
-              <Link href="/signin" className="text-amber-500 hover:text-amber-400 font-medium">
+              <Link href="/signin" className="text-amber-500 hover:text-amber-400 font-medium" onClick={() => router.push("/signin")}>
                 Sign in
               </Link>
             </p>
