@@ -6,7 +6,7 @@ export default function Home() {
   const router = useRouter();
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-100 via-gray-50 to-gray-100">
+    <div className="min-h-screen bg-gradient-to-b from-gray-100 via-gray-50 to-gray-100 pt-20">
       <div className="absolute inset-0 bg-[linear-gradient(to_right,#e5e7eb66_1px,transparent_1px),linear-gradient(to_bottom,#e5e7eb66_1px,transparent_1px)] bg-[size:24px_24px]" />
       <div className="absolute top-0 right-0 w-1/2 h-screen bg-gradient-to-bl from-amber-500/5 via-white/0 to-transparent opacity-70" />
 
@@ -54,7 +54,7 @@ export default function Home() {
                   <div className="space-y-4">
                     <div className="h-12 bg-gray-100 rounded-lg border border-gray-200 flex items-center px-4">
                       <div className="w-4 h-4 rounded-full bg-amber-500/20 border border-amber-500/40 mr-3" />
-                      <div className="text-gray-600 text-sm">ETH Smart Contract → Discord</div>
+                      <div className="text-gray-600 text-sm">ETH Smart Contract → Slack</div>
                     </div>
                     <div className="p-4 bg-gray-100 rounded-lg border border-gray-200">
                       <div className="flex items-center gap-3 mb-3">
@@ -78,7 +78,7 @@ export default function Home() {
                     <div className="flex items-center gap-3">
                       <div className="h-10 w-10 rounded-lg bg-gray-100 border border-gray-200 flex items-center justify-center text-gray-400">→</div>
                       <div className="h-10 flex-1 rounded-lg bg-gray-100 border border-gray-200 flex items-center px-4">
-                        <span className="text-gray-400 text-sm">Send Discord Message</span>
+                        <span className="text-gray-400 text-sm">Send Slack Message</span>
                       </div>
                     </div>
                   </div>

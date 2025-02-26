@@ -35,8 +35,8 @@ export default function SignIn() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-100 via-gray-50 to-gray-100 flex">
-      {/* Left Sidebar */}
+    <div className="h-screen bg-gradient-to-b from-gray-100 via-gray-50 to-gray-100 flex">
+      
       <div className="hidden lg:flex lg:w-1/2 relative p-12 items-center justify-center">
         <div className="absolute inset-0 bg-[linear-gradient(to_right,#e5e7eb66_1px,transparent_1px),linear-gradient(to_bottom,#e5e7eb66_1px,transparent_1px)] bg-[size:24px_24px]" />
         <div className="relative z-10 max-w-xl text-center">
@@ -48,7 +48,6 @@ export default function SignIn() {
         </div>
       </div>
 
-      {/* Right Side - Sign In Form */}
       <div className="flex-1 flex items-center justify-center px-4">
         <div className="w-full max-w-md">
           <div className="relative w-full max-w-md">
@@ -59,7 +58,6 @@ export default function SignIn() {
                 <p className="text-gray-600">Sign in to your Dezap account</p>
               </div>
 
-              {/* Form */}
               <form className="space-y-4" onSubmit={signin}>
                 <div>
                   <label className="text-sm font-medium text-gray-600" htmlFor="email">
@@ -97,7 +95,6 @@ export default function SignIn() {
                   </Link>
                 </div>
 
-                {/* Submit Button */}
                 <button
                   type="submit"
                   className="w-full bg-gradient-to-r from-amber-500 to-amber-600 text-white rounded-lg px-4 py-2.5 font-medium hover:opacity-90 transition-opacity"

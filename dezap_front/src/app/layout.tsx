@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono, Open_Sans } from "next/font/google";
 import "./globals.css";
+import Navbar from "@/components/Navbar";
 
 const openSans = Open_Sans({
   subsets: ['latin']
@@ -30,8 +31,10 @@ export default function RootLayout({
       <body
         className={`${openSans.className}`}
       >
+        <Navbar/>
         {children}
       </body>
     </html>
   );
 }
+

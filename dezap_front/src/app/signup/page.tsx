@@ -38,7 +38,7 @@ export default function SignUp() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-100 via-gray-50 to-gray-100 flex">
+    <div className="h-screen bg-gradient-to-b from-gray-100 via-gray-50 to-gray-100 flex">
       <div className="hidden lg:flex lg:w-1/2 relative p-12 items-center justify-center">
         <div className="absolute inset-0 bg-[linear-gradient(to_right,#e5e7eb66_1px,transparent_1px),linear-gradient(to_bottom,#e5e7eb66_1px,transparent_1px)] bg-[size:24px_24px]" />
         <div className="relative z-10 max-w-xl text-center">
