@@ -18,7 +18,7 @@ export default function Home() {
               Web3 Automation Platform
             </span>
             <h1 className="text-5xl md:text-6xl font-bold text-gray-900 mb-6 leading-[1.1]">
-              Connect <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-500 to-amber-600">blockchain</span> workflows seamlessly
+              Connect <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-500 to-amber-600">blockchain</span> workflows
             </h1>
             <p className="text-xl text-gray-600 mb-10 leading-relaxed max-w-xl">
               Build powerful automation between Web3 and traditional services. 
