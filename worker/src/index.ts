@@ -11,6 +11,7 @@ import {PublicKey} from "@solana/web3.js";
 import {sendEthToMultiple} from "./multipleETH";
 import createOffer from "./createOffer";
 import createListing from "./createListing";
+import sendSlackMessage from "./slackMessage";
 
 dotenv.config()
 const prismaClient = new PrismaClient();
@@ -64,6 +65,10 @@ async function main() {
             }
           });
           const currentAction = zapRunDetails?.zap.actions.find(x => x.sortingOrder === stage);
+          const userId = zapRunDetails?.zap.userId; 
+          
+          console.log(currentAction)
+          console.log(userId)
 
           if (!currentAction) {
             console.log("Current action not found?");
@@ -168,6 +173,32 @@ async function main() {
 
             console.log(`Sending ${amountStr} Wei to multiple addresses on ${server}`);
             await sendEthToMultiple(recipients, server, amountStr);
+          }
+
+          if (currentAction.type.id === "slack") {
+            const channel = parse((currentAction.metadata as JsonObject)?.channel as string, zapRunMetadata);
+            const message = parse((currentAction.metadata as JsonObject)?.message as string, zapRunMetadata);
+
+            console.log(channel)
+            console.log(message)
+
+            if(!userId) {
+              console.log("No user id found");
+              throw new Error("No user id found");
+            }
+
+              const user = await prismaClient.user.findFirst({
+                where: { id: userId },
+                select: { slackToken: true }
+            });    
+
+            if(!channel || !message || !user) throw new Error("Missing channel or message");
+
+            const token = user.slackToken;
+
+            if(!token) throw new Error("No slack token found");
+
+            await sendSlackMessage(channel, message, token);
           }
 
           await new Promise(r => setTimeout(r, 500));
