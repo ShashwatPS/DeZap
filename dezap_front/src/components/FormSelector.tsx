@@ -11,7 +11,7 @@ import SendEmailForm from "./actions/SendEmailForm"
 import SendEthToMultipleWalletsForm from "./actions/SendEthToMultipleWalletsForm"
 import SendSolToMultipleWalletsForm from "./actions/SendSolToMultipleWalletsForm"
 import SendSolToSingleWalletForm from "./actions/SendSolToSingleWalletForm"
-
+import SendSlackMessageForm from "./actions/SendSlackMessageForm"
 interface FormSelectorProps {
     formType: string
     onClose: () => void
@@ -47,6 +47,8 @@ const FormSelector: React.FC<FormSelectorProps> = ({ formType, onClose, handleSu
             return <SendSolToMultipleWalletsForm onClose={onClose} onSubmit={handleSubmit} />
         case "send-sol":
             return <SendSolToSingleWalletForm onClose={onClose} onSubmit={handleSubmit} />
+        case "slackMessage":
+            return <SendSlackMessageForm onClose={onClose} />
         default:
             return <div>No form selected</div>
     }
