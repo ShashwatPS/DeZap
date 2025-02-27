@@ -3,7 +3,7 @@ import { useAuth } from "@/context/AuthContext"
 import { ReactFlow, Controls, Background, applyNodeChanges, addEdge, ConnectionMode, Handle, Position } from "@xyflow/react" // Import addEdge
 import "@xyflow/react/dist/style.css"
 import { useState, useEffect, useRef } from "react"
-import { Zap, Plus } from "lucide-react" // Import Plus icon
+import { Zap, Plus, CircleAlert, AlertCircle, CircleCheck } from "lucide-react" // Import Plus, Check, and X icons
 import { Button } from "@/components/ui/button"
 import { Drawer, DrawerClose, DrawerContent, DrawerFooter, DrawerHeader } from "@/components/ui/drawer"
 import { Input } from "@/components/ui/input"
@@ -83,6 +83,9 @@ const triggerNode = ({ data }: { data: NodeData }) => {
 }
 
 const ActionNode = ({ data }: { data: NodeData }) => {
+    const isMetadataFilled = data.metadata && Object.keys(data.metadata).length > 0; // Check if metadata is filled
+    const isAppSelected = data.ActionAppSet; // Check if app is selected
+
     return (
         <>
             <Handle
@@ -93,28 +96,41 @@ const ActionNode = ({ data }: { data: NodeData }) => {
             />
             <button
                 onClick={(event) => data.onClick(event, { id: "", type: "", data, position: { x: 0, y: 0 } })}
-                style={{ padding: 10, border: "2px dotted #000000", borderRadius: 5, background: "#fff" }}
+                style={{
+                    padding: 10,
+                    border: isAppSelected ? "1px solid #000000" : "2px dotted #000000",
+                    borderRadius: 5,
+                    background: isAppSelected ? "#fff" : "#ECE9DF",
+                    width: 300
+                }}
             >
-                <div
-                    style={{
-                        margin: 1,
-                        backgroundColor: "#ECE9DF",
-                        padding: 5,
-                        borderRadius: 3,
-                        width: "fit-content",
-                        border: "1px solid black",
-                        display: "flex",
-                        alignItems: "center",
-                        marginBottom: 5,
-                    }}
-                >
-                    <div style={{ marginRight: 5 }}>
-                        <Zap className="m-1" fill="#ECE9DF" size={15} />
+                {isAppSelected && (
+                    <div style={{ display: 'flex', alignItems: 'center', alignContent: 'center' }}>
+                        <div style={{ margin: 2, padding: 5 }}>
+                            {isMetadataFilled ? <CircleCheck className="h-4 w-4 text-green-500" /> : <AlertCircle className="w-5 h-5 text-yellow-600" />}
+                        </div>
+                        <div
+                            style={{
+                                backgroundColor: isAppSelected ? "#FFF" : "#ECE9DF",
+                                padding: 5,
+                                borderRadius: 3,
+                                width: "auto",
+                                border: "1px solid #ccc", // Changed border color to light
+                                display: "flex",
+                                alignItems: "center",
+                                marginBottom: 5,
+                                marginLeft: 5
+                            }}>
+                            <div style={{ marginRight: 5, marginLeft: 5 }}>
+                                {data.icon}
+                            </div>
+                            <span className="" style={{ fontWeight: "bold", fontSize: 15 }}>{data.label}</span>
+                        </div>
                     </div>
-                    <span style={{ fontWeight: "bold", fontSize: 15 }}>{data.label}</span>
-                </div>
-                <div className="m-2 font-medium">
+                )}
+                <div className="ml-2 font-medium" style={{ display: 'flex', alignItems: 'center' }}>
                     <span style={{ color: "#88827e" }}> {data.info}</span>
+
                 </div>
             </button>
             <Handle
@@ -164,7 +180,7 @@ const EventNode = ({ data }: { data: NodeData }) => {
                     <span style={{ fontWeight: "bold", fontSize: 15 }}>{data.label}</span>
                 </div>
                 <div className="m-2 font-medium">
-                    <span style={{ fontWeight: "bold", marginRight: 2 }}>{data.id} </span>
+                    <span style={{ fontWeight: "bold", marginRight: 2 }}>{data.id}</span>
                     <span style={{ color: "#88827e" }}>{data.info}</span>
                 </div>
             </button>
@@ -185,37 +201,28 @@ const AddNode = ({ data }: { data: NodeData }) => {
             <Handle
                 type="target"
                 position={Position.Top}
-                onConnect={(params) => console.log('handle onConnect', params)}
+                onConnect={(params) => console.log("handle onConnect", params)}
                 isConnectable={true}
+                style={{ border: "1px solid #6366f1", background: "#6366f1" }}
             />
-            <button
-                onClick={(event) => data.onClick(event, { id: "", type: "add", data, position: { x: 0, y: 0 } })}
-                style={{ padding: 10, border: "2px solid #000000", borderRadius: 5, background: "#fff" }}
+            <div
+                className="flex flex-col items-center justify-center"
+                style={{
+                    border: "1px solid grey",
+                    borderRadius: "5px",
+                    padding: "10px",
+                }}
             >
-                <div
-                    style={{
-                        margin: 1,
-                        backgroundColor: "#ECE9DF",
-                        padding: 5,
-                        borderRadius: 3,
-                        width: "fit-content",
-                        border: "1px solid black",
-                        display: "flex",
-                        alignItems: "center",
-                        marginBottom: 5,
-                    }}
-                >
-                    <div style={{ marginRight: 5 }}>
-                        <Plus className="m-1" fill="#ECE9DF" size={15} />
-                    </div>
-                    <span style={{ fontWeight: "bold", fontSize: 15 }}>Add Node</span>
+                <div className="m-1 flex items-center justify-center w-6 h-6 text-indigo-600">
+                    <Plus size={20} strokeWidth={2.5} />
                 </div>
-            </button>
+            </div>
             <Handle
                 type="source"
                 position={Position.Bottom}
                 id="a"
                 isConnectable={true}
+                style={{ border: "1px solid #6366f1", background: "#6366f1" }}
             />
         </>
     )
@@ -338,6 +345,7 @@ function Flow() {
                             info: app.name,
                             triggerId: app.id,
                             triggerAppSet: true,
+                            ActionAppSet: true, // Ensure ActionAppSet is updated
                             formType: app.name, // Set form type dynamically
                             metadata: {}, // Initialize metadata
                         }

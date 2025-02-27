@@ -15,16 +15,16 @@ export default function Home() {
           <div className="lg:w-1/2">
             <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-amber-50 text-amber-600 text-sm font-medium mb-8 border border-amber-200">
               <div className="w-2 h-2 rounded-full bg-amber-400 animate-pulse" />
-              Web3 Automation Platform
+              Web3 and WorkFlow Automation Platform
             </span>
             <h1 className="text-5xl md:text-6xl font-bold text-gray-900 mb-6 leading-[1.1]">
               Connect <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-500 to-amber-600">blockchain</span> workflows
             </h1>
             <p className="text-xl text-gray-600 mb-10 leading-relaxed max-w-xl">
-              Build powerful automation between Web3 and traditional services. 
+              Build powerful automation between Web3 and traditional services.
               No-code platform for the decentralized future.
             </p>
-            
+
             <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start mb-16">
               <button className="px-8 py-4 rounded-lg bg-amber-500 text-white hover:bg-amber-400 transition-all transform hover:-translate-y-0.5 shadow-lg shadow-amber-500/20" onClick={() => router.push("/signup")}>
                 Start Free Trial
@@ -115,7 +115,7 @@ export default function Home() {
             <div key={i} className="group relative p-8 rounded-2xl bg-gray-50/80 backdrop-blur-xl border border-gray-200 hover:border-amber-200 transition-all duration-300 hover:shadow-2xl hover:shadow-amber-100">
               <div className="absolute inset-x-0 -top-px h-px bg-gradient-to-r from-transparent via-amber-200 to-transparent" />
               <div className="absolute inset-x-0 -bottom-px h-px bg-gradient-to-r from-transparent via-gray-200 to-transparent" />
-              
+
               <div className="flex justify-between items-start mb-4">
                 <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-amber-500/10 to-amber-500/5 border border-amber-500/20 flex items-center justify-center text-2xl shadow-lg shadow-amber-500/10">
                   {feature.icon}
@@ -131,7 +131,7 @@ export default function Home() {
               <p className="text-gray-600 text-sm leading-relaxed mb-4">
                 {feature.desc}
               </p>
-              
+
               <div className="flex items-center justify-between pt-4 border-t border-gray-200">
                 <span className="text-xs text-gray-500">{feature.stats}</span>
                 <svg className="w-5 h-5 text-gray-500 group-hover:text-amber-400 group-hover:translate-x-0.5 transition-all" fill="none" stroke="currentColor" viewBox="0 0 24 24">
