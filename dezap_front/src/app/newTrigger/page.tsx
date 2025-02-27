@@ -1,5 +1,5 @@
 "use client"
-
+import { useAuth } from "@/context/AuthContext"
 import { ReactFlow, Controls, Background, applyNodeChanges, addEdge, ConnectionMode, Handle, Position } from "@xyflow/react" // Import addEdge
 import "@xyflow/react/dist/style.css"
 import { useState, useEffect, useRef } from "react"
@@ -233,6 +233,7 @@ const edgeTypes = {
 }
 
 function Flow() {
+    const { token } = useAuth();
     const [selectedNodeId, setSelectedNodeId] = useState<string | null>(null); // Add state for selected node id
     const router = useRouter(); // Initialize useRouter
 
@@ -287,19 +288,23 @@ function Flow() {
             // Remove the old edge
             setEdges((eds) => eds.filter(edge => edge.id !== connectedEdge.id));
 
-            // Add the new node
-            setNodes((nds) => [...nds, newNode]);
-
-            // Add new edges to connect the new node in between
-            setEdges((eds) => [
-                ...eds,
-                { id: `e${node.id}-${newNodeId}`, source: node.id, target: newNodeId, type: 'custom' },
-                { id: `e${newNodeId}-${connectedEdge.target}`, source: newNodeId, target: connectedEdge.target, type: 'custom' }
-            ]);
+            // Add the new node and new edges in a single setNodes call
+            setNodes((nds) => {
+                const updatedNodes = [...nds, newNode];
+                setEdges((eds) => [
+                    ...eds,
+                    { id: `e${node.id}-${newNodeId}`, source: node.id, target: newNodeId, type: 'custom' },
+                    { id: `e${newNodeId}-${connectedEdge.target}`, source: newNodeId, target: connectedEdge.target, type: 'custom' }
+                ]);
+                return updatedNodes;
+            });
         } else {
             // If no connected edge, just add the new node and connect it to the clicked node
-            setNodes((nds) => [...nds, newNode]);
-            setEdges((eds) => addEdge({ id: `e${node.id}-${newNodeId}`, source: node.id, target: newNodeId, type: 'custom' }, eds));
+            setNodes((nds) => {
+                const updatedNodes = [...nds, newNode];
+                setEdges((eds) => addEdge({ id: `e${node.id}-${newNodeId}`, source: node.id, target: newNodeId, type: 'custom' }, eds));
+                return updatedNodes;
+            });
         }
     }
 
@@ -442,9 +447,10 @@ function Flow() {
     }
 
     const handlePublish = async () => {
+        console.log(nodes);
         const triggerNode = nodes.find(node => node.type === 'trigger');
         const actionNodes = nodes.filter(node => node.type === 'action');
-
+        console.log(actionNodes)
         if (!triggerNode) {
             console.error("No trigger node found");
             return;
@@ -461,9 +467,22 @@ function Flow() {
 
         try {
             console.log("Publishing data:", payload);
-            const response = await axios.post(`${URL}/api/v1/zap`, payload);
+
+            let config = {
+                method: 'post',
+                maxBodyLength: Infinity,
+                url: `${URL}/api/v1/zap`,
+                headers: {
+                    'Authorization': token,
+                    'Content-Type': 'application/json'
+                },
+                data: payload
+            };
+
+            const response = await axios.request(config)
+
             console.log("Publish response:", response.data);
-            router.push('/zap'); // Redirect to success page
+            // router.push('/zaps'); // Redirect to success page
         } catch (error) {
             console.error("Error publishing data:", error);
         }
