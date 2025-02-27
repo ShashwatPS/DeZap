@@ -14,7 +14,8 @@ const BaseForm: React.FC<BaseFormProps> = ({ title, children, onSubmit, onClose 
         e.preventDefault()
         const formData = new FormData(e.target as HTMLFormElement)
         const data = Object.fromEntries(formData)
-        onSubmit(data)
+        onSubmit(data) // Call onSubmit with form data
+        console.log(data)
     }
 
     return (

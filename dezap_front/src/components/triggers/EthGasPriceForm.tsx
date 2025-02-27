@@ -4,9 +4,9 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 
-const EthGasPriceForm: React.FC<{ onClose: () => void }> = ({ onClose }) => {
+const EthGasPriceForm: React.FC<{ onClose: () => void, onSubmit: (data: any) => void }> = ({ onClose, onSubmit }) => {
   return (
-    <BaseForm title="ETH Gas Price" onSubmit={console.log} onClose={onClose}>
+    <BaseForm title="ETH Gas Price" onSubmit={onSubmit} onClose={onClose}>
       <div className="space-y-4">
         <div>
           <Label htmlFor="network">Network</Label>
