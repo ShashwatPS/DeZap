@@ -33,11 +33,27 @@ export default function SignUp() {
           throw new Error(`Signup failed: ${response.status} ${response.statusText}`);
         }
 
-        const data = await response.json();
-        console.log("Signup successful:", data);
-        localStorage.setItem("token", data.token);
+        
+        const data = await fetch(`${URL}/api/v1/user/signIn`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            username: email,
+            password
+          })
+        });
+    
+        if (!data.ok) {
+          throw new Error(`Signin failed: ${response.status} ${response.statusText}`);
+        }
+    
+        const dataToken = await data.json();
+        localStorage.setItem("token", dataToken.token);
         setIsAuthenticated(true);
         router.push("/");
+        console.log("Signup successful:", data);
   }
 
   return (

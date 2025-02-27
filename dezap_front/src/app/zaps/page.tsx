@@ -159,7 +159,7 @@ export default function ZapsPage() {
                       {zap.trigger.type.name === "Webhook" ? (
                         <div className="flex items-center text-sm text-gray-500">
                           <Webhook className="w-4 h-4 mr-1" />
-                          Webhook ID: {zap.trigger.zapId}
+                          Webhook ID: {URL}/api/v1/zap/1/{zap.trigger.zapId}
                         </div>
                       ) : (
                         <div className="flex items-center text-sm text-gray-500">
