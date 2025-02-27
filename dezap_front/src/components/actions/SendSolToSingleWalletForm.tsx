@@ -4,9 +4,9 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 
-const SendSolToSingleWalletForm: React.FC<{ onClose: () => void, onSubmit: (data: any) => void }> = ({ onClose }) => {
+const SendSolToSingleWalletForm: React.FC<{ onClose: () => void, onSubmit: (data: any) => void }> = ({ onClose, onSubmit }) => {
   return (
-    <BaseForm title="Send SOL to Single Wallet" onSubmit={console.log} onClose={onClose}>
+    <BaseForm title="Send SOL to Single Wallet" onSubmit={onSubmit} onClose={onClose}>
       <div className="space-y-4">
         <div>
           <Label htmlFor="amount">Amount</Label>

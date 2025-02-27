@@ -39,6 +39,9 @@ interface Node {
 
 // Custom Node Component
 const triggerNode = ({ data }: { data: NodeData }) => {
+    const isAppSelected = data.triggerAppSet; // Check if app is selected
+    const isMetadataFilled = data.metadata && Object.keys(data.metadata).length > 0; // Check if metadata is filled
+
     return (
         <>
             <Handle
@@ -49,27 +52,54 @@ const triggerNode = ({ data }: { data: NodeData }) => {
             />
             <button
                 onClick={(event) => data.onClick(event, { id: "", type: "", data, position: { x: 0, y: 0 } })}
-                style={{ padding: 10, border: "2px dotted #201515", borderRadius: 10, background: "#fff" }}
+                style={{ padding: 10, border: isAppSelected ? "1px solid #000000" : "2px dotted #000000", borderRadius: 5, background: "#fff", width: 300 }}
             >
-                <div
-                    style={{
-                        margin: 1,
-                        backgroundColor: "#ECE9DF",
-                        padding: 5,
-                        borderRadius: 5,
-                        width: "fit-content",
-                        border: "1px solid black",
-                        display: "flex",
-                        alignItems: "center",
-                        marginBottom: 5,
-                    }}
-                >
-                    <div style={{ marginRight: 5 }}>{data.icon}</div>
-                    <span style={{ fontWeight: "600", fontSize: 15 }}>{data.label}</span>
-                </div>
-                <div className="mr-2 ml-2 mt-2 font-medium">
-                    <span style={{ fontWeight: "bold", marginRight: 2 }}>1. </span>
-                    <span style={{ color: "#88827e" }}>{data.info}</span>
+                {isAppSelected ? (
+                    <div style={{ display: 'flex', alignItems: 'center', alignContent: 'center' }}>
+                        <div style={{ padding: 2 }}>
+                            {isMetadataFilled ? <CircleCheck className="h-4 w-4 text-green-500" /> : <AlertCircle className="w-5 h-5 text-yellow-600" />}
+                        </div>
+                        <div
+                            style={{
+                                backgroundColor: "#FFF",
+                                padding: 5,
+                                borderRadius: 3,
+                                width: "auto",
+                                border: "1px solid #ccc", // Changed border color to light
+                                display: "flex",
+                                alignItems: "center",
+                                marginBottom: 5,
+                                marginLeft: 5
+                            }}>
+                            <div style={{ marginRight: 5, marginLeft: 5 }}>
+                                {data.icon}
+                            </div>
+                            <span className="" style={{ fontWeight: "bold", fontSize: 15 }}>{data.label}</span>
+                        </div>
+                    </div>
+                ) : (
+                    <div>
+                        <div
+                            style={{
+                                backgroundColor: "#ECE9DF",
+                                padding: 5,
+                                borderRadius: 3,
+                                width: "fit-content",
+                                border: "1px solid black",
+                                display: "flex",
+                                alignItems: "center",
+                                marginBottom: 5,
+                            }}
+                        >
+                            <div style={{ marginRight: 5, borderRight: "1px solid black" }}>
+                                <Zap className="m-1" fill="#ECE9DF" size={15} />
+                            </div>
+                            <span style={{ fontWeight: "bold", fontSize: 15, marginLeft: 2 }}>Trigger</span>
+                        </div>
+                    </div>
+                )}
+                <div className="font-medium w-full" style={{ display: 'flex', alignItems: 'center', alignContent: 'center', marginLeft: 5 }}>
+                    <span style={{ color: "#88827e" }} className=""> {data.info}</span>
                 </div>
             </button>
             <Handle
@@ -100,11 +130,11 @@ const ActionNode = ({ data }: { data: NodeData }) => {
                     padding: 10,
                     border: isAppSelected ? "1px solid #000000" : "2px dotted #000000",
                     borderRadius: 5,
-                    background: isAppSelected ? "#fff" : "#ECE9DF",
+                    background: isAppSelected ? "#fff" : "#fff",
                     width: 300
                 }}
             >
-                {isAppSelected && (
+                {isAppSelected ? (
                     <div style={{ display: 'flex', alignItems: 'center', alignContent: 'center' }}>
                         <div style={{ padding: 2 }}>
                             {isMetadataFilled ? <CircleCheck className="h-4 w-4 text-green-500" /> : <AlertCircle className="w-5 h-5 text-yellow-600" />}
@@ -125,6 +155,26 @@ const ActionNode = ({ data }: { data: NodeData }) => {
                                 {data.icon}
                             </div>
                             <span className="" style={{ fontWeight: "bold", fontSize: 15 }}>{data.label}</span>
+                        </div>
+                    </div>
+                ) : (
+                    <div>
+                        <div
+                            style={{
+                                backgroundColor: "#ECE9DF",
+                                padding: 5,
+                                borderRadius: 3,
+                                width: "fit-content",
+                                border: "1px solid black",
+                                display: "flex",
+                                alignItems: "center",
+                                marginBottom: 5,
+                            }}
+                        >
+                            <div style={{ marginRight: 5, borderRight: "1px solid black" }}>
+                                <Plus className="m-1" fill="#ECE9DF" size={15} />
+                            </div>
+                            <span style={{ fontWeight: "bold", fontSize: 15, marginLeft: 2 }}>Action</span>
                         </div>
                     </div>
                 )}
@@ -274,7 +324,7 @@ function Flow() {
     const addNewNode = (node: Node) => {
         const newNodeId = `${nodes.length + 1}`;
         const addNodeId = `add-${newNodeId}`;
-        
+
         const newNode = {
             id: newNodeId,
             type: "action",
@@ -289,7 +339,7 @@ function Flow() {
             },
             position: { x: node.position.x, y: node.position.y + 100 },
         };
-    
+
         const newAddNode = {
             id: addNodeId,
             type: "add",
@@ -302,13 +352,13 @@ function Flow() {
             },
             position: { x: newNode.position.x, y: newNode.position.y + 100 },
         };
-    
+
         // Remove the old add node
         const updatedNodes = nodes.filter(n => n.id !== node.id);
-        
+
         // Add the new action node and new add node
         setNodes([...updatedNodes, newNode, newAddNode]);
-    
+
         // Update edges
         const sourceNodeId = edges.find(edge => edge.target === node.id)?.source;
         if (sourceNodeId) {
