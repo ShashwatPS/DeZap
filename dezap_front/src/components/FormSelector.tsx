@@ -47,8 +47,8 @@ const FormSelector: React.FC<FormSelectorProps> = ({ formType, onClose, handleSu
             return <SendSolToMultipleWalletsForm onClose={onClose} onSubmit={handleSubmit} />
         case "send-sol":
             return <SendSolToSingleWalletForm onClose={onClose} onSubmit={handleSubmit} />
-        case "slackMessage":
-            return <SendSlackMessageForm onClose={onClose} />
+        case "slack":
+            return <SendSlackMessageForm onClose={onClose} onSubmit={handleSubmit} />
         default:
             return <div>No form selected</div>
     }

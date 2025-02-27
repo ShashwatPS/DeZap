@@ -550,7 +550,7 @@ function Flow() {
             const response = await axios.request(config)
 
             console.log("Publish response:", response.data);
-            // router.push('/zaps'); // Redirect to success page
+            router.push('/zaps'); // Redirect to success page
         } catch (error) {
             console.error("Error publishing data:", error);
         }
