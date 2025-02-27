@@ -1,40 +1,43 @@
 "use client";
 
-import Image from "next/image";
-import Link from "next/link";
 import { useState } from "react";
-import { URL } from "../../constants/url";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
+import { URL } from "@/constants/url";
+import Image from "next/image";
+import Link from "next/link";
 
 export default function SignIn() {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
+  const [error, setError] = useState<string | null>(null);
   const router = useRouter();
-  const { setIsAuthenticated } = useAuth();
+  const { setAuth } = useAuth();
 
-  const signin = async (e: React.FormEvent) => {
-    e.preventDefault(); 
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      const response = await fetch(`${URL}/api/v1/user/signin`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          username: email,
+          password: password,
+        }),
+      });
 
-    const response = await fetch(`${URL}/api/v1/user/signIn`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        username: email,
-        password
-      })
-    });
-
-    if (!response.ok) {
-      throw new Error(`Signin failed: ${response.status} ${response.statusText}`);
+      const data = await response.json();
+      if (response.ok) {
+        setAuth(data.token);
+        router.push("/zaps");
+      } else {
+        setError(data.message || "Login failed");
+      }
+    } catch (error) {
+      setError("An error occurred during login");
     }
-
-    const data = await response.json();
-    localStorage.setItem("token", data.token);
-    setIsAuthenticated(true);
-    router.push("/");
   };
 
   return (
@@ -61,7 +64,7 @@ export default function SignIn() {
                 <p className="text-gray-600">Sign in to your Dezap account</p>
               </div>
 
-              <form className="space-y-4" onSubmit={signin}>
+              <form className="space-y-4" onSubmit={handleSubmit}>
                 <div>
                   <label className="text-sm font-medium text-gray-600" htmlFor="email">
                     Email

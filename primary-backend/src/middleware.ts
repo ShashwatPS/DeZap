@@ -4,6 +4,8 @@ import { JWT_PASSWORD } from "./config";
 
 export function authMiddleware (req: Request, res: Response, next: NextFunction) {
     const token = req.headers.authorization as unknown as string;
+    console.log("Inside auth middleware")
+    console.log(token)
     
     try {
         const payload = jwt.verify(token, JWT_PASSWORD);
