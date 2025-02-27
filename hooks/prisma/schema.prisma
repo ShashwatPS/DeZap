@@ -18,6 +18,7 @@ model User {
   name     String
   email    String
   password String
+  slackToken String?
   zaps     Zap[]
 }
 

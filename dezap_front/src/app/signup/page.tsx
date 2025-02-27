@@ -7,53 +7,58 @@ import { useRouter } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
 
 export default function SignUp() {
-  const [ email, setEmail ] = useState<string>("")  
-  const [ password, setPassword ] = useState<string>("");
-  const [ name, setName ] = useState<string>("");
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+  const [name, setName] = useState<string>("");
+  const [error, setError] = useState<string | null>(null);
 
-  const { setIsAuthenticated } = useAuth();
+  const { setAuth } = useAuth();
   const router = useRouter();
 
   const signUp = async(e: React.FormEvent) => { 
     e.preventDefault(); 
+    try {
+      // Sign up request
+      const signupResponse = await fetch(`${URL}/api/v1/user/signup`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          username: email,
+          password,
+          name
+        })
+      });
 
-        const response = await fetch(`${URL}/api/v1/user/signup`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({
-            username: email,
-            password,
-            name
-          })
-        });
+      if (!signupResponse.ok) {
+        const errorData = await signupResponse.json();
+        setError(errorData.message || "Sign up failed");
+        return;
+      }
 
-        if (!response.ok) {
-          throw new Error(`Signup failed: ${response.status} ${response.statusText}`);
-        }
-
-        
-        const data = await fetch(`${URL}/api/v1/user/signIn`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({
-            username: email,
-            password
-          })
-        });
-    
-        if (!data.ok) {
-          throw new Error(`Signin failed: ${response.status} ${response.statusText}`);
-        }
-    
-        const dataToken = await data.json();
-        localStorage.setItem("token", dataToken.token);
-        setIsAuthenticated(true);
-        router.push("/");
-        console.log("Signup successful:", data);
+      // Sign in request
+      const signinResponse = await fetch(`${URL}/api/v1/user/signin`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          username: email,
+          password
+        })
+      });
+  
+      if (!signinResponse.ok) {
+        setError("Sign in after signup failed");
+        return;
+      }
+  
+      router.push("/signin");
+    } catch (error) {
+      setError("An error occurred during registration");
+      console.error("Signup error:", error);
+    }
   }
 
   return (
@@ -78,6 +83,11 @@ export default function SignUp() {
             </div>
 
             <form className="space-y-4" onSubmit={signUp}>
+              {error && (
+                <div className="p-3 text-sm text-red-500 bg-red-50 rounded-lg">
+                  {error}
+                </div>
+              )}
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <label className="text-sm font-medium text-gray-600" htmlFor="firstName">
