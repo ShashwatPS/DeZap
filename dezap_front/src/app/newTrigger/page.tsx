@@ -12,12 +12,16 @@ import { Search, Code, Mail, Rss, Calendar, Table } from "lucide-react"
 import CalendarForm from "@/components/ui/calendar-form"
 import Draggable from "react-draggable"
 import axios from "axios"
+import FormSelector from "@/components/FormSelector" // Import FormSelector
+
 interface NodeData {
     label: string;
     info: string;
+    triggerId: string;
     onClick: (event: React.MouseEvent<HTMLButtonElement>, node: Node) => void;
     icon: React.ReactNode;
     triggerAppSet: boolean;
+    formType?: string; // Add formType to NodeData
 }
 
 interface Node {
@@ -25,7 +29,8 @@ interface Node {
     type: string;
     data: NodeData;
     position: { x: number; y: number };
-}``
+}
+
 // Custom Node Component
 const triggerNode = ({ data }: { data: NodeData }) => {
     return (
@@ -112,7 +117,7 @@ const EventNode = ({ data }: { data: NodeData }) => {
                 <span style={{ fontWeight: "bold", fontSize: 15 }}>{data.label}</span>
             </div>
             <div className="m-2 font-medium">
-                <span style={{ fontWeight: "bold", marginRight: 2 }}>1.</span>
+                <span style={{ fontWeight: "bold", marginRight: 2 }}>1. </span>
                 <span style={{ color: "#88827e" }}>{data.info}</span>
             </div>
         </button>
@@ -126,15 +131,14 @@ const nodeTypes = {
 }
 
 function Flow() {
-
-
     const handleNodeClick = (event: React.MouseEvent<HTMLButtonElement>, node: Node) => {
         if (node && node.data) {
             if (!node.data.triggerAppSet) {
                 console.log("Node Clicked", node.data.triggerAppSet)
                 setIsDrawerOpen(true)
             } else {
-                setFormContent(node.data)
+                console.log(node.data)
+                setSelectedForm(node.data.triggerId) // Set selected form type
                 setIsFormOpen(true)
             }
         }
@@ -143,6 +147,7 @@ function Flow() {
     const [selectedApp, setSelectedApp] = useState<App | null>(null)
     const [isFormOpen, setIsFormOpen] = useState(false)
     const [formContent, setFormContent] = useState<NodeData | null>(null)
+    const [selectedForm, setSelectedForm] = useState<string | null>(null) // Add state for selected form type
     interface App {
         id: string;
         name: string;
@@ -163,8 +168,10 @@ function Flow() {
                             ...node.data,
                             label: app.name,
                             icon: <img src={app.image} alt={app.name} style={{ width: 20, height: 20 }} />,
-                            info: "Select the Event",
+                            info: app.name,
+                            triggerId: app.id,
                             triggerAppSet: true,
+                            formType: app.name, // Set form type dynamically
                         },
                     }
                     : node,
@@ -179,6 +186,7 @@ function Flow() {
             try {
                 const response = await axios.get('http://localhost:3000/api/v1/trigger/available')
                 setAvailableTriggers(response.data.availableTriggers)
+                console.log(response.data.availableTriggers)
             } catch (error) {
                 console.error("Error fetching triggers:", error)
             }
@@ -232,7 +240,7 @@ function Flow() {
                 <Background />
                 <Controls />
             </ReactFlow>
-            {isFormOpen && (
+            {isFormOpen && selectedForm && (
                 <Draggable nodeRef={formRef}>
                     <div
                         ref={formRef}
@@ -247,9 +255,10 @@ function Flow() {
                             width: "300px",
                             cursor: "move",
                         }}
+                        className="outer"
                     >
                         <div className="max-w-xl">
-                            <CalendarForm onClose={() => setIsFormOpen(false)} />
+                            <FormSelector formType={selectedForm} onClose={() => setIsFormOpen(false)} />
                         </div>
                     </div>
                 </Draggable>
@@ -265,7 +274,7 @@ function Flow() {
                         </DrawerHeader>
                         <Tabs defaultValue="apps" className="mt-4">
                             <TabsList className="w-full justify-start">
-                                <TabsTrigger value="apps">382</TabsTrigger>
+                                <TabsTrigger value="apps">Apps</TabsTrigger>
                                 <TabsTrigger value="zapier">Products</TabsTrigger>
                                 <TabsTrigger value="tools">Built-in tools</TabsTrigger>
                                 <TabsTrigger value="all">All</TabsTrigger>
