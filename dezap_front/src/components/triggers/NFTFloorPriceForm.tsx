@@ -4,9 +4,9 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 
-const NFTFloorPriceForm: React.FC<{ onClose: () => void }> = ({ onClose }) => {
+const NFTFloorPriceForm: React.FC<{ onClose: () => void, onSubmit: (data: any) => void }> = ({ onClose, onSubmit }) => {
   return (
-    <BaseForm title="NFT Floor Price" onSubmit={console.log} onClose={onClose}>
+    <BaseForm title="NFT Floor Price" onSubmit={onSubmit} onClose={onClose}>
       <div className="space-y-4">
         <div>
           <Label htmlFor="contractAddress">Contract Address</Label>

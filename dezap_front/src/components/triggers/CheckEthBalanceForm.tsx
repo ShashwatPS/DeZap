@@ -4,9 +4,9 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 
-const CheckEthBalanceForm: React.FC<{ onClose: () => void }> = ({ onClose }) => {
+const CheckEthBalanceForm: React.FC<{ onClose: () => void, onSubmit: (data: any) => void }> = ({ onClose, onSubmit }) => {
   return (
-    <BaseForm title="Check ETH Balance" onSubmit={console.log} onClose={onClose}>
+    <BaseForm title="Check ETH Balance" onSubmit={onSubmit} onClose={onClose}>
       <div className="space-y-4">
         <div>
           <Label htmlFor="network">Network</Label>
@@ -27,7 +27,16 @@ const CheckEthBalanceForm: React.FC<{ onClose: () => void }> = ({ onClose }) => 
         </div>
         <div>
           <Label htmlFor="ethUnits">ETH Units</Label>
-          <Input id="ethUnits" name="ethUnits" placeholder="Enter ETH units" />
+          <Select name="ethUnits">
+            <SelectTrigger>
+              <SelectValue placeholder="Select ETH units" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="wei">Wei</SelectItem>
+              <SelectItem value="gwei">Gwei</SelectItem>
+              <SelectItem value="ether">Ether</SelectItem>
+            </SelectContent>
+          </Select>
         </div>
         <div>
           <Label htmlFor="balance">Balance</Label>

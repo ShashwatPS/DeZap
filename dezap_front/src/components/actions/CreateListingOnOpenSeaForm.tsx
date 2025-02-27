@@ -3,9 +3,9 @@ import BaseForm from "../BaseForm"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 
-const CreateListingOnOpenSeaForm: React.FC<{ onClose: () => void }> = ({ onClose }) => {
+const CreateListingOnOpenSeaForm: React.FC<{ onClose: () => void, onSubmit: (data: any) => void }> = ({ onClose, onSubmit }) => {
   return (
-    <BaseForm title="Create Listing on OpenSea" onSubmit={console.log} onClose={onClose}>
+    <BaseForm title="Create Listing on OpenSea" onSubmit={onSubmit} onClose={onClose}>
       <div className="space-y-4">
         <div>
           <Label htmlFor="tokenAddress">Token Address</Label>

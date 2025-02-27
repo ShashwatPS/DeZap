@@ -15,37 +15,38 @@ import SendSolToSingleWalletForm from "./actions/SendSolToSingleWalletForm"
 interface FormSelectorProps {
     formType: string
     onClose: () => void
+    handleSubmit: (data: any) => void
 }
 
-const FormSelector: React.FC<FormSelectorProps> = ({ formType, onClose }) => {
+const FormSelector: React.FC<FormSelectorProps> = ({ formType, onClose, handleSubmit }) => {
     switch (formType) {
         // Triggers
         case "checkEthBalance":
-            return <CheckEthBalanceForm onClose={onClose} />
+            return <CheckEthBalanceForm onClose={onClose} onSubmit={handleSubmit} />
         case "checkEthWalletReceivesFunds":
-            return <CheckWalletReceivesFundForm onClose={onClose} />
+            return <CheckWalletReceivesFundForm onClose={onClose} onSubmit={handleSubmit} />
         case "checkEthWalletSendFunds":
-            return <CheckEthWalletSendFundsForm onClose={onClose} />
+            return <CheckEthWalletSendFundsForm onClose={onClose} onSubmit={handleSubmit} />
         case "checkFunctionCalled":
-            return <CheckFunctionCalledForm onClose={onClose} />
+            return <CheckFunctionCalledForm onClose={onClose} onSubmit={handleSubmit} />
         case "nftFloorPrice":
-            return <NFTFloorPriceForm onClose={onClose} />
+            return <NFTFloorPriceForm onClose={onClose} onSubmit={handleSubmit} />
         case "ethGasPrice":
-            return <EthGasPriceForm onClose={onClose} />
+            return <EthGasPriceForm onClose={onClose} onSubmit={handleSubmit} />
 
         // Actions
-        case "createListingOnOpenSea":
-            return <CreateListingOnOpenSeaForm onClose={onClose} />
-        case "createOfferOnOpenSea":
-            return <CreateOfferOnOpenSeaForm onClose={onClose} />
-        case "sendEmail":
-            return <SendEmailForm onClose={onClose} />
-        case "sendEthToMultipleWallets":
-            return <SendEthToMultipleWalletsForm onClose={onClose} />
-        case "sendSolToMultipleWallets":
-            return <SendSolToMultipleWalletsForm onClose={onClose} />
-        case "sendSolToSingleWallet":
-            return <SendSolToSingleWalletForm onClose={onClose} />
+        case "create-listing":
+            return <CreateListingOnOpenSeaForm onClose={onClose} onSubmit={handleSubmit} />
+        case "create-offer":
+            return <CreateOfferOnOpenSeaForm onClose={onClose} onSubmit={handleSubmit} />
+        case "email":
+            return <SendEmailForm onClose={onClose} onSubmit={handleSubmit} />
+        case "multiple-eth":
+            return <SendEthToMultipleWalletsForm onClose={onClose} onSubmit={handleSubmit} />
+        case "multiple-sol":
+            return <SendSolToMultipleWalletsForm onClose={onClose} onSubmit={handleSubmit} />
+        case "send-sol":
+            return <SendSolToSingleWalletForm onClose={onClose} onSubmit={handleSubmit} />
         default:
             return <div>No form selected</div>
     }

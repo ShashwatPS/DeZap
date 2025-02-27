@@ -4,9 +4,18 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 
-const CheckWalletReceivesFundForm: React.FC<{ onClose: () => void }> = ({ onClose }) => {
+const CheckWalletReceivesFundForm: React.FC<{ onClose: () => void, onSubmit: (data: any) => void }> = ({ onClose, onSubmit }) => {
+  const handleSubmit = (data: any) => {
+    // Save form data as metadata
+    const metadata = {
+      network: data.network,
+      walletAddress: data.walletAddress,
+    }
+    onSubmit(metadata)
+  }
+
   return (
-    <BaseForm title="Check Wallet Receives Fund" onSubmit={console.log} onClose={onClose}>
+    <BaseForm title="Check Wallet Receives Fund" onSubmit={handleSubmit} onClose={onClose}>
       <div className="space-y-4">
         <div>
           <Label htmlFor="network">Network</Label>

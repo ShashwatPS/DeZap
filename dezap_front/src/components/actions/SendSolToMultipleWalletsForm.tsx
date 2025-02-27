@@ -5,9 +5,9 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 
-const SendSolToMultipleWalletsForm: React.FC<{ onClose: () => void }> = ({ onClose }) => {
+const SendSolToMultipleWalletsForm: React.FC<{ onClose: () => void, onSubmit: (data: any) => void }> = ({ onClose, onSubmit }) => {
   return (
-    <BaseForm title="Send SOL to Multiple Wallets" onSubmit={console.log} onClose={onClose}>
+    <BaseForm title="Send SOL to Multiple Wallets" onSubmit={onSubmit} onClose={onClose}>
       <div className="space-y-4">
         <div>
           <Label htmlFor="amount">Amount</Label>
