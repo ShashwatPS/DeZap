@@ -23,7 +23,7 @@ const EthGasPriceForm: React.FC<{ onClose: () => void, onSubmit: (data: any) => 
         </div>
         <div>
           <Label htmlFor="expectedPrice">Expected Price</Label>
-          <Input id="expectedPrice" name="expectedPrice" type="number" placeholder="Enter expected price" />
+          <Input id="expectedPrice" name="expectedPrice" type="string" placeholder="Enter expected price"/>
         </div>
       </div>
     </BaseForm>

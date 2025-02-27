@@ -5,6 +5,7 @@ services:
     depends_on:
       my-pb:
         condition: service_healthy
+    restart: always
     ports:
       - "3002:3002"
     env_file:
@@ -16,6 +17,7 @@ services:
     depends_on:
       my-pb:
         condition: service_healthy
+    restart: always
     env_file:
       - .env
 
@@ -25,6 +27,7 @@ services:
     depends_on:
       my-pb:
         condition: service_healthy
+    restart: always
     env_file:
       - .env
 
@@ -54,6 +57,7 @@ services:
     depends_on:
       my-pb:
         condition: service_healthy
+    restart: always
     env_file:
       - .env
 
@@ -62,6 +66,7 @@ services:
     depends_on:
       my-pb:
         condition: service_healthy
+    restart: always
     env_file:
       - .env
 

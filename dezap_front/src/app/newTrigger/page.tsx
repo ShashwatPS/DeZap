@@ -533,6 +533,8 @@ function Flow() {
             }))
         };
 
+        console.log("Publishing data:", payload);
+
         try {
             console.log("Publishing data:", payload);
 

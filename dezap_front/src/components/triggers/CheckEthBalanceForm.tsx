@@ -26,8 +26,8 @@ const CheckEthBalanceForm: React.FC<{ onClose: () => void, onSubmit: (data: any)
           <Input id="walletAddress" name="walletAddress" placeholder="Enter wallet address" />
         </div>
         <div>
-          <Label htmlFor="ethUnits">ETH Units</Label>
-          <Select name="ethUnits">
+          <Label htmlFor="unit">ETH Units</Label>
+          <Select name="unit">
             <SelectTrigger>
               <SelectValue placeholder="Select ETH units" />
             </SelectTrigger>
@@ -39,8 +39,8 @@ const CheckEthBalanceForm: React.FC<{ onClose: () => void, onSubmit: (data: any)
           </Select>
         </div>
         <div>
-          <Label htmlFor="balance">Balance</Label>
-          <Input id="balance" name="balance" placeholder="Enter balance" />
+          <Label htmlFor="bal">Balance</Label>
+          <Input id="bal" name="bal" placeholder="Enter balance" />
         </div>
       </div>
     </BaseForm>

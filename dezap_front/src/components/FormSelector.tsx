@@ -25,7 +25,7 @@ const FormSelector: React.FC<FormSelectorProps> = ({ formType, onClose, handleSu
             return <CheckEthBalanceForm onClose={onClose} onSubmit={handleSubmit} />
         case "checkEthWalletReceivesFunds":
             return <CheckWalletReceivesFundForm onClose={onClose} onSubmit={handleSubmit} />
-        case "checkEthWalletSendFunds":
+        case "checkEthWalletSendsFunds":
             return <CheckEthWalletSendFundsForm onClose={onClose} onSubmit={handleSubmit} />
         case "checkFunctionCalled":
             return <CheckFunctionCalledForm onClose={onClose} onSubmit={handleSubmit} />
