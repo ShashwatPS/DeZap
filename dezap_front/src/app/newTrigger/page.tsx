@@ -106,7 +106,7 @@ const ActionNode = ({ data }: { data: NodeData }) => {
             >
                 {isAppSelected && (
                     <div style={{ display: 'flex', alignItems: 'center', alignContent: 'center' }}>
-                        <div style={{ margin: 2, padding: 5 }}>
+                        <div style={{ padding: 2 }}>
                             {isMetadataFilled ? <CircleCheck className="h-4 w-4 text-green-500" /> : <AlertCircle className="w-5 h-5 text-yellow-600" />}
                         </div>
                         <div
@@ -128,8 +128,8 @@ const ActionNode = ({ data }: { data: NodeData }) => {
                         </div>
                     </div>
                 )}
-                <div className="ml-2 font-medium" style={{ display: 'flex', alignItems: 'center' }}>
-                    <span style={{ color: "#88827e" }}> {data.info}</span>
+                <div className="font-medium w-full" style={{ display: 'flex', alignItems: 'center', alignContent: 'center', marginLeft: 5 }}>
+                    <span style={{ color: "#88827e" }} className=""> {data.info}</span>
 
                 </div>
             </button>

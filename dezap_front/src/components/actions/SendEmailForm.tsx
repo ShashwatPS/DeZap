@@ -9,8 +9,8 @@ const SendEmailForm: React.FC<{ onClose: () => void, onSubmit: (data: any) => vo
     <BaseForm title="Send Email" onSubmit={onSubmit} onClose={onClose}>
       <div className="space-y-4">
         <div>
-          <Label htmlFor="to">To</Label>
-          <Input id="to" name="to" placeholder="Enter recipient email" />
+          <Label htmlFor="email">To</Label>
+          <Input id="email" name="email" placeholder="Enter recipient email" />
         </div>
         <div>
           <Label htmlFor="subject">Subject</Label>
