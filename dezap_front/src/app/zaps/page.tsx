@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { URL } from "../../constants/url";
+import { URL, WEBHOOK_URL } from "../../constants/url";
 import { Box, PlayCircle, PauseCircle, Webhook, Calendar, ChevronRight, ExternalLink } from "lucide-react";
 import Link from "next/link";
 
@@ -178,7 +178,7 @@ export default function ZapsPage() {
                       <div className="flex items-center gap-2 bg-gray-50 px-3 py-1 rounded-full">
                         <Webhook className="w-4 h-4" />
                         <span className="font-mono text-xs">
-                          {`${URL}/api/v1/zap/1/${zap.trigger.zapId}`}
+                          {`${WEBHOOK_URL}/hooks/catch/1/${zap.trigger.zapId}`}
                         </span>
                         <button
                           onClick={() => navigator.clipboard.writeText(`${URL}/api/v1/zap/1/${zap.trigger.zapId}`)}
