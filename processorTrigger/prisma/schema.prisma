@@ -27,6 +27,7 @@ model Zap {
   userId    Int
   trigger   Trigger?
   metadata  Json     @default("{}")
+  createdAt DateTime @default(now())
   actions   Action[]
   zapRuns   ZapRun[]
   user      User     @relation(fields: [userId], references: [id])
@@ -53,10 +54,11 @@ model Action {
 }
 
 model AvailableAction {
-  id      String   @id @default(uuid())
-  name    String
-  image   String
-  actions Action[]
+  id       String   @id @default(uuid())
+  name     String
+  image    String
+  actions  Action[]
+  category String
 }
 
 model AvailableTrigger {
@@ -64,12 +66,14 @@ model AvailableTrigger {
   name     String
   image    String
   triggers Trigger[]
+  category String
 }
 
 model ZapRun {
   id           String        @id @default(uuid())
   zapId        String
   metadata     Json
+  createdAt    DateTime      @default(now())
   zap          Zap           @relation(fields: [zapId], references: [id])
   zapRunOutbox ZapRunOutbox?
 }
