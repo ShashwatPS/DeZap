@@ -273,11 +273,13 @@ function Flow() {
 
     const addNewNode = (node: Node) => {
         const newNodeId = `${nodes.length + 1}`;
+        const addNodeId = `add-${newNodeId}`;
+        
         const newNode = {
             id: newNodeId,
             type: "action",
             data: {
-                id: newNodeId, // Ensure id is updated here
+                id: newNodeId,
                 label: "Action",
                 info: "Select the Action to Perform",
                 onClick: handleNodeClick,
@@ -287,31 +289,39 @@ function Flow() {
             },
             position: { x: node.position.x, y: node.position.y + 100 },
         };
-
-        // Find the edge connected to the clicked node
-        const connectedEdge = edges.find(edge => edge.source === node.id);
-
-        if (connectedEdge) {
-            // Remove the old edge
-            setEdges((eds) => eds.filter(edge => edge.id !== connectedEdge.id));
-
-            // Add the new node and new edges in a single setNodes call
-            setNodes((nds) => {
-                const updatedNodes = [...nds, newNode];
-                setEdges((eds) => [
-                    ...eds,
-                    { id: `e${node.id}-${newNodeId}`, source: node.id, target: newNodeId, type: 'custom' },
-                    { id: `e${newNodeId}-${connectedEdge.target}`, source: newNodeId, target: connectedEdge.target, type: 'custom' }
-                ]);
-                return updatedNodes;
-            });
+    
+        const newAddNode = {
+            id: addNodeId,
+            type: "add",
+            data: {
+                label: "Add Node",
+                info: "Click to add a new node",
+                onClick: handleNodeClick,
+                icon: <Plus className="m-1" fill="#ECE9DF" size={15} />,
+                triggerAppSet: false,
+            },
+            position: { x: newNode.position.x, y: newNode.position.y + 100 },
+        };
+    
+        // Remove the old add node
+        const updatedNodes = nodes.filter(n => n.id !== node.id);
+        
+        // Add the new action node and new add node
+        setNodes([...updatedNodes, newNode, newAddNode]);
+    
+        // Update edges
+        const sourceNodeId = edges.find(edge => edge.target === node.id)?.source;
+        if (sourceNodeId) {
+            setEdges([
+                ...edges.filter(edge => edge.target !== node.id),
+                { id: `e${sourceNodeId}-${newNodeId}`, source: sourceNodeId, target: newNodeId, type: 'custom' },
+                { id: `e${newNodeId}-${addNodeId}`, source: newNodeId, target: addNodeId, type: 'custom' },
+            ]);
         } else {
-            // If no connected edge, just add the new node and connect it to the clicked node
-            setNodes((nds) => {
-                const updatedNodes = [...nds, newNode];
-                setEdges((eds) => addEdge({ id: `e${node.id}-${newNodeId}`, source: node.id, target: newNodeId, type: 'custom' }, eds));
-                return updatedNodes;
-            });
+            setEdges([
+                ...edges,
+                { id: `e${newNodeId}-${addNodeId}`, source: newNodeId, target: addNodeId, type: 'custom' },
+            ]);
         }
     }
 
@@ -320,7 +330,7 @@ function Flow() {
     const [formContent, setFormContent] = useState<NodeData | null>(null)
     const [selectedForm, setSelectedForm] = useState<string | null>(null) // Add state for selected form type
     const [edges, setEdges] = useState<{ id: string; source: string; target: string; type: string }[]>([
-        { id: 'e1-2', source: '1', target: '2', type: 'custom' }
+        { id: 'e1-add-1', source: '1', target: 'add-1', type: 'custom' }
     ]) // Initialize edges with an edge from node id 1 to node id 2
     interface App {
         id: string;
@@ -397,7 +407,7 @@ function Flow() {
             position: { x: 0, y: 0 },
         },
         {
-            id: "2",
+            id: "add-1",
             type: "add",
             data: {
                 label: "Add Node",
@@ -406,7 +416,7 @@ function Flow() {
                 icon: <Plus className="m-1" fill="#ECE9DF" size={15} />,
                 triggerAppSet: false,
             },
-            position: { x: 0, y: 300 },
+            position: { x: 0, y: 100 },
         },
     ])
 
