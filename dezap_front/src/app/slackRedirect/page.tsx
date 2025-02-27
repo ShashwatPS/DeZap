@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { URL } from "@/constants/url";
 import { useAuth } from "@/context/AuthContext";
@@ -11,6 +11,7 @@ const SlackRedirect = () => {
   const [error, setError] = useState<string | null>(null);
 
   const getTokens = async (code: string, userToken: string) => {
+    console.log(userToken)
     try {
       const data = await fetch(`${URL}/api/v1/user/slack/callback?code=${code}`, {
         method: "POST",
@@ -35,23 +36,25 @@ const SlackRedirect = () => {
     }
   };
 
+  const effectRan = useRef(false);
+  
+
   useEffect(() => {
+    if (!token) return; 
+  
+    if (effectRan.current) return;
+    effectRan.current = true;
+  
     const urlParams = new URLSearchParams(window.location.search);
     const code = urlParams.get("code");
-    
-    if (!token) {
-      setError("Authentication required");
-      router.push("/signin");
-      return;
-    }
-
+  
     if (code) {
       getTokens(code, token);
     } else {
       setError("No authorization code received from Slack");
       router.push("/integration");
     }
-  }, [token, router]);
+  }, [token, router]); 
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-100 via-gray-50 to-gray-100 pt-20">
