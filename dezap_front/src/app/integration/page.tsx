@@ -1,36 +1,78 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import redirectToSlack from "@/constants/SlackAuth";
 import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
-
-const integrations = [
-  {
-    name: "Slack",
-    description: "Connect with Slack to send messages and notifications",
-    icon: "https://w7.pngwing.com/pngs/345/302/png-transparent-chat-slack-slack-logo-social-media-icon-thumbnail.png",
-    action: redirectToSlack,
-    connected: false,
-  },
-  {
-    name: "Gmail",
-    description: "Connect with Gmail to send and receive emails",
-    icon: "https://banner2.cleanpng.com/20240403/ras/transparent-gmail-icon-google-mail-logo-with-vibrant-colors-and-m660d4ec2bd9db0.46699070.webp",
-    action: () => console.log("Gmail integration coming soon"),
-    connected: false,
-    comingSoon: true,
-  },
-  {
-    name: "GitHub",
-    description: "Connect with GitHub to automate your workflow",
-    icon: "https://img.icons8.com/ios_filled/512/github.png",
-    action: () => console.log("GitHub integration coming soon"),
-    connected: false,
-    comingSoon: true,
-  }
-];
+import { URL } from "@/constants/url";
+import { useAuth } from "@/context/AuthContext";
 
 export default function Integration() {
+  const { token } = useAuth();
+  const [isSlackConnected, setIsSlackConnected] = useState(false);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const checkSlackConnection = async () => {
+      try {
+        const response = await fetch(`${URL}/api/v1/user/slack`, {
+          headers: {
+            Authorization: token || '',
+          },
+        });
+        setIsSlackConnected(response.ok);
+      } catch (error) {
+        console.error("Error checking Slack connection:", error);
+        setIsSlackConnected(false);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (token) {
+      checkSlackConnection();
+    }
+  }, [token]);
+
+  const integrations = [
+    {
+      name: "Slack",
+      description: "Connect with Slack to send messages and notifications",
+      icon: "https://w7.pngwing.com/pngs/345/302/png-transparent-chat-slack-slack-logo-social-media-icon-thumbnail.png",
+      action: redirectToSlack,
+      connected: isSlackConnected,
+    },
+    {
+      name: "Gmail",
+      description: "Connect with Gmail to send and receive emails",
+      icon: "https://banner2.cleanpng.com/20240403/ras/transparent-gmail-icon-google-mail-logo-with-vibrant-colors-and-m660d4ec2bd9db0.46699070.webp",
+      action: () => console.log("Gmail integration coming soon"),
+      connected: false,
+      comingSoon: true,
+    },
+    {
+      name: "GitHub",
+      description: "Connect with GitHub to automate your workflow",
+      icon: "https://img.icons8.com/ios_filled/512/github.png",
+      action: () => console.log("GitHub integration coming soon"),
+      connected: false,
+      comingSoon: true,
+    }
+  ];
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-b from-gray-100 via-gray-50 to-gray-100 pt-20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-amber-500 mx-auto"></div>
+            <p className="mt-4 text-gray-600">Loading integrations...</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-100 via-gray-50 to-gray-100 pt-20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -79,14 +121,16 @@ export default function Integration() {
               </p>
               <button
                 onClick={integration.action}
-                disabled={integration.comingSoon}
+                disabled={integration.comingSoon || integration.connected}
                 className={`w-full px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
                   integration.comingSoon
                     ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
+                    : integration.connected
+                    ? 'bg-green-500 text-white cursor-not-allowed'
                     : 'bg-amber-500 text-white hover:bg-amber-400'
                 }`}
               >
-                {integration.connected ? 'Manage Connection' : 'Connect'}
+                {integration.connected ? 'Connected' : 'Connect'}
               </button>
             </div>
           ))}
