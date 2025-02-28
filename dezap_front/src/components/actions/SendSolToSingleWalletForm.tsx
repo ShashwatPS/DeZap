@@ -1,4 +1,4 @@
-import type React from "react"
+import React from "react"
 import BaseForm from "../BaseForm"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Input } from "@/components/ui/input"
@@ -26,8 +26,8 @@ const SendSolToSingleWalletForm: React.FC<{ onClose: () => void, onSubmit: (data
           </Select>
         </div>
         <div>
-          <Label htmlFor="recipient">Recipient</Label>
-          <Input id="recipient" name="recipient" placeholder="Enter recipient address" />
+          <Label htmlFor="walletAddress">Recipient</Label>
+          <Input id="walletAddress" name="walletAddress" placeholder="Enter recipient address" />
         </div>
       </div>
     </BaseForm>

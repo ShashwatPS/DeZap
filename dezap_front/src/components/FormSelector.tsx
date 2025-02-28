@@ -12,6 +12,7 @@ import SendEthToMultipleWalletsForm from "./actions/SendEthToMultipleWalletsForm
 import SendSolToMultipleWalletsForm from "./actions/SendSolToMultipleWalletsForm"
 import SendSolToSingleWalletForm from "./actions/SendSolToSingleWalletForm"
 import SendSlackMessageForm from "./actions/SendSlackMessageForm"
+import SendETHToMultipleWalletsForm from "./actions/SendEthToMultipleWalletsForm"
 interface FormSelectorProps {
     formType: string
     onClose: () => void
@@ -47,6 +48,8 @@ const FormSelector: React.FC<FormSelectorProps> = ({ formType, onClose, handleSu
             return <SendSolToMultipleWalletsForm onClose={onClose} onSubmit={handleSubmit} />
         case "send-sol":
             return <SendSolToSingleWalletForm onClose={onClose} onSubmit={handleSubmit} />
+        case "send-eth":
+            return <SendETHToMultipleWalletsForm onClose={onClose} onSubmit={handleSubmit} />
         case "slack":
             return <SendSlackMessageForm onClose={onClose} onSubmit={handleSubmit} />
         default:
