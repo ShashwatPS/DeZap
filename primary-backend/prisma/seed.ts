@@ -19,7 +19,7 @@ async function main() {
         create: {
             id: "checkEthBalance",
             name: "Check Wallet Balance Eth",
-            image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRIovxkR9l-OlwpjTXV1B4YNh0W_s618ijxAQ&s",
+            image: "https://w7.pngwing.com/pngs/968/208/png-transparent-ethereum-logos-brands-icon.png",
             category: "Wallet Activity"
         }
     });
@@ -30,7 +30,7 @@ async function main() {
         create: {
             id: "checkEthWalletReceivesFunds",
             name: "Check Wallet Receives Funds Eth",
-            image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRIovxkR9l-OlwpjTXV1B4YNh0W_s618ijxAQ&s",
+            image: "https://w7.pngwing.com/pngs/968/208/png-transparent-ethereum-logos-brands-icon.png",
             category: "Wallet Activity"
         }
     });
@@ -41,7 +41,7 @@ async function main() {
         create: {
             id: "checkEthWalletSendsFunds",
             name: "Check Wallet Sends Funds Eth",
-            image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRIovxkR9l-OlwpjTXV1B4YNh0W_s618ijxAQ&s",
+            image: "https://w7.pngwing.com/pngs/968/208/png-transparent-ethereum-logos-brands-icon.png",
             category: "Wallet Activity"
         }
     });
@@ -52,7 +52,7 @@ async function main() {
         create: {
             id: "ethGasPrice",
             name: "Check Eth Gas Price",
-            image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRIovxkR9l-OlwpjTXV1B4YNh0W_s618ijxAQ&s",
+            image: "https://w7.pngwing.com/pngs/968/208/png-transparent-ethereum-logos-brands-icon.png",
             category: "Ethereum"
         }
     });
