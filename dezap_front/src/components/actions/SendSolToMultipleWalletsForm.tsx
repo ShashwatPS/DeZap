@@ -59,9 +59,9 @@ const SendSolToMultipleWalletsForm: React.FC<{ onClose: () => void; onSubmit: (d
               <SelectValue placeholder="Select network" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="main">Main</SelectItem>
-              <SelectItem value="dev">Dev</SelectItem>
-              <SelectItem value="test">Test</SelectItem>
+              <SelectItem value="main">main</SelectItem>
+              <SelectItem value="dev">dev</SelectItem>
+              <SelectItem value="test">test</SelectItem>
             </SelectContent>
           </Select>
         </div>
