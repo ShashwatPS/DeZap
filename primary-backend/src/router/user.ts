@@ -110,7 +110,7 @@ router.post("/slack/callback", authMiddleware, async (req, res) => {
 
     const clientID = "5875039330148.8519347852739";
     const clientSecret = "236ef261106f48d29c90b0298601d07f";
-    const redirectURI = "https://64c9-2409-40d2-2c-d436-8ceb-83a0-361c-676b.ngrok-free.app/slackRedirect";
+    const redirectURI = "https://a8b7-2409-40d2-2c-d436-2cc1-5a28-51c0-128e.ngrok-free.app/slackRedirect";
     const tokenURL = "https://slack.com/api/oauth.v2.access";
 
     try {

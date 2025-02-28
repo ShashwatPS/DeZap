@@ -1,5 +1,5 @@
 export const URL="http://localhost:3000"
 export const SLACK_CLIENT_ID ="5875039330148.8519347852739"
 export const SLACK_CLIENT_SECRET="236ef261106f48d29c90b0298601d07f"    
-export const SLACK_REDIRECT_URI="https://64c9-2409-40d2-2c-d436-8ceb-83a0-361c-676b.ngrok-free.app/slackRedirect"
+export const SLACK_REDIRECT_URI="https://a8b7-2409-40d2-2c-d436-2cc1-5a28-51c0-128e.ngrok-free.app/slackRedirect"
 export const WEBHOOK_URL="http://localhost:3002"
