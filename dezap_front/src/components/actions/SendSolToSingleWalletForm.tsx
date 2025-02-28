@@ -13,8 +13,8 @@ const SendSolToSingleWalletForm: React.FC<{ onClose: () => void, onSubmit: (data
           <Input id="amount" name="amount" type="number" placeholder="Enter amount" />
         </div>
         <div>
-          <Label htmlFor="network">Network</Label>
-          <Select name="network">
+          <Label htmlFor="server">Network</Label>
+          <Select name="server">
             <SelectTrigger>
               <SelectValue placeholder="Select network" />
             </SelectTrigger>
@@ -26,8 +26,8 @@ const SendSolToSingleWalletForm: React.FC<{ onClose: () => void, onSubmit: (data
           </Select>
         </div>
         <div>
-          <Label htmlFor="walletAddress">Recipient</Label>
-          <Input id="walletAddress" name="walletAddress" placeholder="Enter recipient address" />
+          <Label htmlFor="recipient">Recipient</Label>
+          <Input id="recipient" name="recipient" placeholder="Enter recipient address" />
         </div>
       </div>
     </BaseForm>
