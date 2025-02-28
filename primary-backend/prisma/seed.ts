@@ -85,7 +85,7 @@ async function main() {
         create: {
             id: "multiple-sol",
             name: "Send Sol to Multiple Wallets",
-            image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ4nd82eFk5SaBPRIeCpmwL7A4YSokA-kXSmw&s",
+            image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT10458YI0Lf1-Zx4fGwhWxI_x4oPCD034xaw&s",
             category: "Solana"
         }
     });
