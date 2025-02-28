@@ -1,5 +1,5 @@
 import { ethers } from "ethers";
-import {ETH_PRIVATE_KEY, ethConnectionGoerli, ethConnectionMain} from "./constants";
+import {ETH_PRIVATE_KEY, ethConnectionGoerli, ethConnectionMain, ethConnectionSepolia} from "./constants";
 
 export async function sendEthToMultiple(recipients: { address: string }[], network: string, amount: string): Promise<string[]> {
     try {
@@ -23,7 +23,7 @@ export async function sendEthToMultiple(recipients: { address: string }[], netwo
             : network === "goerli"
                 ? ethConnectionGoerli
                 : network === "sepolia"
-                    ? ethConnectionGoerli
+                    ? ethConnectionSepolia
                     : null;
 
         if (!provider) {
